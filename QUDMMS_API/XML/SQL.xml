@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<XML>
+  <QUDMMS_DB>
+    <!--[QUDMMS]-InstructorMS-->
+    <SQL_gdUg2TfBXJ>
+      INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`(
+      `instructor_id`,
+      `title`,
+      `first_name`,
+      `last_name`,
+      `email`,
+      `years_exp`)VALUE(
+      @instructor_id,
+      @title,
+      @first_name,
+      @last_name,
+      @email,
+      @years_exp);
+    </SQL_gdUg2TfBXJ>
+
+    <SQL_Hy8e8CCYuJ>
+      SELECT
+      `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`.`instructor_id`,
+      `first_name`,
+      `last_name`,
+      `email`,
+      `instructor_status`,
+      `years_exp`,
+      `c_working`,
+      `avaliable_term`,
+      `teaching_load`,
+      `admin_load`,
+      `cfwd_load`,
+      `total_load`
+      FROM
+      `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
+    </SQL_Hy8e8CCYuJ>
+  </QUDMMS_DB>
+</XML>
