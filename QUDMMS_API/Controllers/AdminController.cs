@@ -103,21 +103,38 @@ namespace QUDMMSAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateInstructor(JObject Parameter)
         {
-
-            Object Param_gdUg2TfBXJ = new
+            try
             {
-                instructor_id = Convert.ToString(Parameter["instructor_id"]),
-                title = Convert.ToString(Parameter["title"]),
-                first_name = Convert.ToString(Parameter["first_name"]),
-                last_name = Convert.ToString(Parameter["last_name"]),
-                email = Convert.ToString(Parameter["email"]),
-                years_exp = Convert.ToString(Parameter["years_exp"])
-            };
             //string aa = " INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`(`instructor_id`,`title`,`first_name`,`last_name`,`email`,`years_exp`)VALUE(@instructor_id,@title,@first_name,@last_name,@email,@years_exp); ";
+                Object Param_gdUg2TfBXJ = new
+                {
+                    instructor_id = Convert.ToString(Parameter["instructor_id"]),
+                    title = Convert.ToString(Parameter["title"]),
+                    first_name = Convert.ToString(Parameter["first_name"]),
+                    last_name = Convert.ToString(Parameter["last_name"]),
+                    email = Convert.ToString(Parameter["email"]),
+                    years_exp = Convert.ToString(Parameter["years_exp"])
+                };
+                //string aa = " INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`(`instructor_id`,`title`,`first_name`,`last_name`,`email`,`years_exp`)VALUE(@instructor_id,@title,@first_name,@last_name,@email,@years_exp); ";
 
-            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_gdUg2TfBXJ"), Param_gdUg2TfBXJ);
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_gdUg2TfBXJ"), Param_gdUg2TfBXJ);
 
-            return Ok("Create instructor profile success.");
+                JArray Jarray_teachingHistory = (JArray)Parameter["teaching_history"];
+                for (int i = 0; i < Jarray_teachingHistory.Count; i++)
+                {
+                    JObject Json_XaFayq70bN = new JObject();
+                    Json_XaFayq70bN.Add("course_code", Jarray_teachingHistory[i]["course_code"]);
+                    Json_XaFayq70bN.Add("course+title", Jarray_teachingHistory[i]["course_title"]);
+                    Json_XaFayq70bN.Add("section_number", Jarray_teachingHistory[i]["section_number"]);
+                    Json_XaFayq70bN.Add("teaching_year", Jarray_teachingHistory[i]["teaching_year"]);
+                    Json_XaFayq70bN.Add("instructor_id", Convert.ToString(Parameter["instructor_id"]));
+                    await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_XaFayq70bN"), Json_XaFayq70bN);
+                }
+
+                return Ok("Create instructor profile success.");
+            }
+            catch (Exception ex) { return BadRequest("Create insrtuctor profile failed."); }
+
 
         }
 
@@ -158,8 +175,78 @@ namespace QUDMMSAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateInstructor(JObject Parameter)
         {
-            try { return Ok(""); } catch (Exception ex) { return BadRequest("UpdateInstructorFailed"); }
+            try
+            {
+                Object Param_E6W9vT3JdU = new
+                {
+                    instructor_id = Convert.ToString(Parameter["instructor_id"]),
+                    title = Convert.ToString(Parameter["title"]),
+                    first_name = Convert.ToString(Parameter["first_name"]),
+                    last_name = Convert.ToString(Parameter["last_name"]),
+                    email = Convert.ToString(Parameter["email"]),
+                    years_exp = Convert.ToString(Parameter["years_exp"])
+                };
+                
+
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_gdUg2TfBXJ"), Param_E6W9vT3JdU);// update basic info
+
+                JArray Jarray_teachingHistory = (JArray)Parameter["teaching_history"];
+                for (int i = 0; i < Jarray_teachingHistory.Count; i++)
+                {
+                    JObject Json_b2nuUdjHBS = new JObject();
+                    Json_b2nuUdjHBS.Add("course_code", Jarray_teachingHistory[i]["course_code"]);
+                    Json_b2nuUdjHBS.Add("course+title", Jarray_teachingHistory[i]["course_title"]);
+                    Json_b2nuUdjHBS.Add("section_number", Jarray_teachingHistory[i]["section_number"]);
+                    Json_b2nuUdjHBS.Add("teaching_year", Jarray_teachingHistory[i]["teaching_year"]);
+                    Json_b2nuUdjHBS.Add("instructor_id", Convert.ToString(Parameter["instructor_id"]));
+                    await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_XaFayq70bN"), Json_b2nuUdjHBS);// update teaching history
+                }
+
+                return Ok("Create instructor profile success.");
+            }
+            catch (Exception ex) { return BadRequest("Create insrtuctor profile failed."); }
+
         }
+        #endregion
+
+        #region[QUDMMS]-Admin-TAMS-CourseMS 
+        [HttpPost]
+        public async Task<ActionResult> BrowseCourseList(JObject Parameter)
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateCourse(JObject Parameter)
+        {
+            Object Param_wX7GCRLjmN = new
+            {
+                course_code = Convert.ToString(Parameter["course_code"]),
+                program = Convert.ToString(Parameter["program"]),
+                course_level = Convert.ToString(Parameter["course_level"]),
+                course_title = Convert.ToString(Parameter["course_title"]),
+                course_description = Convert.ToString(Parameter["course_description"]),
+                course_topics = Convert.ToString(Parameter["course_topics"]),
+                course_weight = Convert.ToString(Parameter["course_weight"]),
+                course_note = Convert.ToString(Parameter["course_note"]),
+                combined_course = Convert.ToString(Parameter["combined_course"])
+            };
+
+            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_wX7GCRLjmN"), Param_wX7GCRLjmN);// Create course exclude prerequisite
+
+            JArray Jarray_Prerequisite = (JArray)Parameter["course_prerequisite"];
+            JObject Param_dgjpyDm2HX = new JObject();
+            for (int i = 0; i < Jarray_Prerequisite.Count(); i++)
+            {
+                Param_dgjpyDm2HX.Add("course_prerequisite", Jarray_Prerequisite[i]);
+            }
+            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_dgjpyDm2HX"), Param_dgjpyDm2HX);
+            return Ok("Create course success.");
+        }
+
+        #endregion
+
+        #region [QUDMMS]-Admin-TAMS-Committee
         #endregion
     }
 }
