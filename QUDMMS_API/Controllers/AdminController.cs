@@ -105,7 +105,6 @@ namespace QUDMMSAPI.Controllers
         {
             try
             {
-            //string aa = " INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`(`instructor_id`,`title`,`first_name`,`last_name`,`email`,`years_exp`)VALUE(@instructor_id,@title,@first_name,@last_name,@email,@years_exp); ";
                 Object Param_gdUg2TfBXJ = new
                 {
                     instructor_id = Convert.ToString(Parameter["instructor_id"]),
