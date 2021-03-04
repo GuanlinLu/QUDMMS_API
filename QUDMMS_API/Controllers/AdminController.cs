@@ -186,7 +186,6 @@ namespace QUDMMSAPI.Controllers
                     years_exp = Convert.ToString(Parameter["years_exp"])
                 };
                 
-
                 await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_gdUg2TfBXJ"), Param_E6W9vT3JdU);// update basic info
 
                 JArray Jarray_teachingHistory = (JArray)Parameter["teaching_history"];
@@ -231,7 +230,7 @@ namespace QUDMMSAPI.Controllers
                 combined_course = Convert.ToString(Parameter["combined_course"])
             };
 
-            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_wX7GCRLjmN"), Param_wX7GCRLjmN);// Create course exclude prerequisite
+            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_wX7GCRLjmN"), Param_wX7GCRLjmN);//Create Course with basic info
 
             JArray Jarray_Prerequisite = (JArray)Parameter["course_prerequisite"];
             JObject Param_dgjpyDm2HX = new JObject();
