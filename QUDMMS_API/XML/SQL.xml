@@ -18,6 +18,24 @@
       @years_exp);
     </SQL_gdUg2TfBXJ>
 
+    <SQL_XaFayq70bN>
+      INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_insrtuctorTeachingHistory`
+      (
+      `course_code`,
+      `course_title`,
+      `instructor_id`,
+      `teaching_year`,
+      `section_number`)
+      VALUES
+      (
+      @course_code,
+      @course_title,
+      @instructor_id,
+      @teaching_year,
+      @section_number
+      );
+    </SQL_XaFayq70bN>
+
     <SQL_Hy8e8CCYuJ>
       SELECT
       `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`.`instructor_id`,
@@ -26,14 +44,82 @@
       `email`,
       `instructor_status`,
       `years_exp`,
-      `c_working`,
-      `avaliable_term`,
-      `teaching_load`,
-      `admin_load`,
-      `cfwd_load`,
-      `total_load`
+      `c_working_status`,
+      `avaliable_term`
       FROM
       `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
+      WHERE
+      `instructor_id`=@instructor_id;
     </SQL_Hy8e8CCYuJ>
+
+    <SQL_abyki3T37e>
+      SELECT `QUDM_TAMS_insrtuctorTeachingHistory`.`teachingHistory_id`,
+      `QUDM_TAMS_insrtuctorTeachingHistory`.`course_code`,
+      `QUDM_TAMS_insrtuctorTeachingHistory`.`course_title`,
+      `QUDM_TAMS_insrtuctorTeachingHistory`.`instructor_id`,
+      `QUDM_TAMS_insrtuctorTeachingHistory`.`teaching_year`,
+      `QUDM_TAMS_insrtuctorTeachingHistory`.`section_number`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_insrtuctorTeachingHistory`;
+    </SQL_abyki3T37e>
+
+    <SQL_E6W9vT3JdU>
+      UPDATE `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
+      SET
+      `instructor_id` = @instructor_id,
+      `title` = @title,
+      `first_name` = @first_name,
+      `last_name` = @last_name,
+      `email` = @email,
+      `current_FTE` = @current_FTE,
+      `instructor_status` = @instructor_status,
+      `years_exp` = @year_exp,
+      `c_working_status` = @c_working_status,
+      `avaliable_term` = @avaliable_term,
+      `teaching_load` = @teaching_load,
+      `admin_load` = @admin_load,
+      `cfwd_load` = @cfwd_load,
+      `total_load` = @total_load
+      WHERE `instructor_id` = @instructor_id;
+
+    </SQL_E6W9vT3JdU>
+
+    <SQL_2fufaYyDsT>
+      DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
+      WHERE `instructor_id` = @instructor_id;
+    </SQL_2fufaYyDsT>
+    <!--[QUDMMS]-CourseMS-->
+    <SQL_wX7GCRLjmN>
+      INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_courseInfo`
+      (`course_code`,
+      `program`,
+      `course_level`,
+      `course_title`,
+      `course_description`,
+      `course_topics`,
+      `course_weight`,
+      `course_prerequisite`,
+      `course_teaching_load`,
+      `course_note`,
+      `combined_course`)
+      VALUES
+      (
+      @course_code,
+      @program,
+      @course_level,
+      @course_title,
+      @course_description,
+      @course_topics,
+      @course_weight,
+      @course_prerequisite,
+      @course_teaching_load,
+      @course_note,
+      @combined_course
+      );
+    </SQL_wX7GCRLjmN>
+
+
+
+
+
   </QUDMMS_DB>
 </XML>
