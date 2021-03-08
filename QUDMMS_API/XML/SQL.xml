@@ -2,6 +2,24 @@
 <XML>
   <QUDMMS_DB>
     <!--[QUDMMS]-InstructorMS-->
+    <SQL_zq61H4SJdL>
+      SELECT COUNT(*) AS pageSum
+      FROM `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
+      @dynamic_condition;
+    </SQL_zq61H4SJdL>
+
+    <SQL_U83Eb0bl4Q>
+      SELECT `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`.`instructor_id` AS 'Instructor ID',
+      `QUDM_TAMS_instructorInfo`.`title` AS 'Title',
+      `QUDM_TAMS_instructorInfo`.`first_name` AS 'First Name',
+      `QUDM_TAMS_instructorInfo`.`last_name` AS 'Last Name',
+      `QUDM_TAMS_instructorInfo`.`email` AS 'Email'
+      FROM `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
+      @dynamic_condition
+      ORDER BY `QUDM_TAMS_instructorInfo`.`last_name` DESC
+      LIMIT @page_number , 10;
+    </SQL_U83Eb0bl4Q>
+
     <SQL_gdUg2TfBXJ>
       INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`(
       `instructor_id`,
@@ -72,7 +90,7 @@
       `email` = @email,
       `current_FTE` = @current_FTE,
       `instructor_status` = @instructor_status,
-      `years_exp` = @year_exp,
+      `years_exp` = @years_exp,
       `c_working_status` = @c_working_status,
       `avaliable_term` = @avaliable_term,
       `teaching_load` = @teaching_load,
@@ -80,14 +98,48 @@
       `cfwd_load` = @cfwd_load,
       `total_load` = @total_load
       WHERE `instructor_id` = @instructor_id;
-
     </SQL_E6W9vT3JdU>
+
+    <SQL_b2nuUdjHBS>
+      UPDATE `QUDMMS_DB`.`QUDM_TAMS_insrtuctorTeachingHistory`
+      SET
+      `course_code` = @course_code,
+      `course_title` = @course_title,
+      `instructor_id` = @instructor_id,
+      `teaching_year` = @teaching_year,
+      `section_number` = @section_number
+      WHERE `instructor_id` = @instructor_id;
+    </SQL_b2nuUdjHBS>
 
     <SQL_2fufaYyDsT>
       DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
       WHERE `instructor_id` = @instructor_id;
     </SQL_2fufaYyDsT>
     <!--[QUDMMS]-CourseMS-->
+    <SQL_8aN4nnYYVz>
+      SELECT COUNT(*) AS pageSum
+      FROM `QUDMMS_DB`.`QUDM_TAMS_courseInfo`
+      @dynamic_condition;
+    </SQL_8aN4nnYYVz>
+
+    <SQL_yZZSnuIMA4>
+
+    </SQL_yZZSnuIMA4>
+    SELECT `QUDM_TAMS_courseInfo`.`course_code`,
+    `QUDM_TAMS_courseInfo`.`program`,
+    `QUDM_TAMS_courseInfo`.`course_prerequisite`,
+    `QUDM_TAMS_courseInfo`.`course_level`,
+    `QUDM_TAMS_courseInfo`.`course_title`,
+    `QUDM_TAMS_courseInfo`.`course_description`,
+    `QUDM_TAMS_courseInfo`.`course_topics`,
+    `QUDM_TAMS_courseInfo`.`course_weight`,
+    `QUDM_TAMS_courseInfo`.`course_teaching_load`,
+    `QUDM_TAMS_courseInfo`.`course_note`,
+    `QUDM_TAMS_courseInfo`.`combined_course`
+    FROM `QUDMMS_DB`.`QUDM_TAMS_courseInfo`;
+    @dynamic_condition
+    ORDER BY `QUDM_TAMS_courseInfo`.`course_code` DESC
+    LIMIT @page_number , 10;
     <SQL_wX7GCRLjmN>
       INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_courseInfo`
       (`course_code`,
@@ -117,8 +169,44 @@
       );
     </SQL_wX7GCRLjmN>
 
+    <SQL_YmSO0uis0Y>
+      SELECT `QUDMMS_DB`.`QUDM_TAMS_courseInfo`.`course_code`,
+      `QUDM_TAMS_courseInfo`.`program`,
+      `QUDM_TAMS_courseInfo`.`course_prerequisite`,
+      `QUDM_TAMS_courseInfo`.`course_level`,
+      `QUDM_TAMS_courseInfo`.`course_title`,
+      `QUDM_TAMS_courseInfo`.`course_description`,
+      `QUDM_TAMS_courseInfo`.`course_topics`,
+      `QUDM_TAMS_courseInfo`.`course_weight`,
+      `QUDM_TAMS_courseInfo`.`course_teaching_load`,
+      `QUDM_TAMS_courseInfo`.`course_note`,
+      `QUDM_TAMS_courseInfo`.`combined_course`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_courseInfo`
+      WHERE
+      `course_code`= @course_code;
+    </SQL_YmSO0uis0Y>
 
+    <SQL_274n2jCFPi>
+      DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_courseInfo`
+      WHERE `course_code` = @course_code;
+    </SQL_274n2jCFPi>
 
+    <SQL_UOMyQmL2rw>
+      UPDATE `QUDMMS_DB`.`QUDM_TAMS_courseInfo`
+      SET
+      `course_code` = @course_code,
+      `program` = @program,
+      `course_prerequisite` = @course_prerequisite,
+      `course_level` = @course_level,
+      `course_title` = @course_title,
+      `course_description` = @course_description,
+      `course_topics` = @course_topics,
+      `course_weight` = @course_weight,
+      `course_teaching_load` =@course_teaching_load,
+      `course_note` = @course_note,
+      `combined_course` = @combined_course
+      WHERE `course_code` = @course_code;
+    </SQL_UOMyQmL2rw>
 
 
   </QUDMMS_DB>
