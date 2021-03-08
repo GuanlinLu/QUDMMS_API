@@ -123,23 +123,23 @@
     </SQL_8aN4nnYYVz>
 
     <SQL_yZZSnuIMA4>
-
+      SELECT `QUDMMS_DB`.`QUDM_TAMS_courseInfo`.`course_code`,
+      `QUDM_TAMS_courseInfo`.`program`,
+      `QUDM_TAMS_courseInfo`.`course_prerequisite`,
+      `QUDM_TAMS_courseInfo`.`course_level`,
+      `QUDM_TAMS_courseInfo`.`course_title`,
+      `QUDM_TAMS_courseInfo`.`course_description`,
+      `QUDM_TAMS_courseInfo`.`course_topics`,
+      `QUDM_TAMS_courseInfo`.`course_weight`,
+      `QUDM_TAMS_courseInfo`.`course_teaching_load`,
+      `QUDM_TAMS_courseInfo`.`course_note`,
+      `QUDM_TAMS_courseInfo`.`combined_course`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_courseInfo`
+      @dynamic_condition
+      ORDER BY `QUDM_TAMS_courseInfo`.`course_code` DESC
+      LIMIT @page_number , 10;
     </SQL_yZZSnuIMA4>
-    SELECT `QUDM_TAMS_courseInfo`.`course_code`,
-    `QUDM_TAMS_courseInfo`.`program`,
-    `QUDM_TAMS_courseInfo`.`course_prerequisite`,
-    `QUDM_TAMS_courseInfo`.`course_level`,
-    `QUDM_TAMS_courseInfo`.`course_title`,
-    `QUDM_TAMS_courseInfo`.`course_description`,
-    `QUDM_TAMS_courseInfo`.`course_topics`,
-    `QUDM_TAMS_courseInfo`.`course_weight`,
-    `QUDM_TAMS_courseInfo`.`course_teaching_load`,
-    `QUDM_TAMS_courseInfo`.`course_note`,
-    `QUDM_TAMS_courseInfo`.`combined_course`
-    FROM `QUDMMS_DB`.`QUDM_TAMS_courseInfo`;
-    @dynamic_condition
-    ORDER BY `QUDM_TAMS_courseInfo`.`course_code` DESC
-    LIMIT @page_number , 10;
+
     <SQL_wX7GCRLjmN>
       INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_courseInfo`
       (`course_code`,
