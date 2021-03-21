@@ -208,6 +208,101 @@
       WHERE `course_code` = @course_code;
     </SQL_UOMyQmL2rw>
 
+    <!--[QUDMMS]-AssnMS-->
+    <SQL_B1TVxNdzqj>
+      INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`
+      (`course_code`,
+      `section_number`,
+      `course_title`,
+      `assn_year`,
+      `assn_term`,
+      `course_delivery`,
+      `instructor_1_id`,
+      `instructor_1_name`,
+      `assn_notes`,
+      `program`)
+      VALUES
+      (
+      @course_code,
+      @section_number,
+      @course_title,
+      @assn_year,
+      @assn_term,
+      @course_delivery,
+      @instructor_1_id,
+      @instructor_1_name,
+      @assn_notes,
+      @program
+      );
+      SELECT LAST_INSERT_ID() AS 'assn_id';
 
+    </SQL_B1TVxNdzqj>
+
+    <SQL_I7EwPEEqq7>
+      INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_DM_weeklySchedule`
+      (`course_code`,
+      `section_number`,
+      `lecture_day`,
+      `teaching_address`,
+      `lecture_start_time`,
+      `lecture_end_time`,
+      `instructor_id`,
+      `instructor_name`,
+      `shcedule_create_date`,
+      `assn_id`,
+      `program`)
+      VALUES(
+      @course_code,
+      @section_number,
+      @lecture_day,
+      @teaching_address,
+      @lecture_start_time,
+      @lecture_end_time,
+      @instructor_id,
+      @instructor_name,
+      now(),
+      @assn_id,
+      @program
+      );
+    </SQL_I7EwPEEqq7>
+
+    <SQL_KVxRK0QXiK>
+      SELECT `QUDM_TAMS_assignmentSchedule`.`assn_id`,
+      `QUDM_TAMS_assignmentSchedule`.`course_code`,
+      `QUDM_TAMS_assignmentSchedule`.`section_number`,
+      `QUDM_TAMS_assignmentSchedule`.`course_title`,
+      `QUDM_TAMS_assignmentSchedule`.`assn_year`,
+      `QUDM_TAMS_assignmentSchedule`.`assn_term`,
+      `QUDM_TAMS_assignmentSchedule`.`course_delivery`,
+      `QUDM_TAMS_assignmentSchedule`.`instructor_1_id`,
+      `QUDM_TAMS_assignmentSchedule`.`instructor_1_name`,
+      `QUDM_TAMS_assignmentSchedule`.`assn_notes`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`
+      WHERE `assn_id` = @assn_id;
+    </SQL_KVxRK0QXiK>
+
+    <SQL_9lCwockMTF>
+      SELECT `QUDM_TAMS_DM_weeklySchedule`.`lecture_id`,
+      `QUDM_TAMS_DM_weeklySchedule`.`course_code`,
+      `QUDM_TAMS_DM_weeklySchedule`.`section_number`,
+      `QUDM_TAMS_DM_weeklySchedule`.`lecture_day`,
+      `QUDM_TAMS_DM_weeklySchedule`.`teaching_address`,
+      `QUDM_TAMS_DM_weeklySchedule`.`lecture_start_time`,
+      `QUDM_TAMS_DM_weeklySchedule`.`lecture_end_time`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_DM_weeklySchedule`
+      WHERE `assn_id`= @assn_id;
+    </SQL_9lCwockMTF>
+
+    <SQL_2ASmH5jDGB>
+      DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`
+      WHERE `assn_id`= @assn_id;
+    </SQL_2ASmH5jDGB>
+
+    <SQL_PIq2W8EV22>
+      DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_DM_weeklySchedule`
+      WHERE `assn_id`= @assn_id;
+    </SQL_PIq2W8EV22>
+
+    <!---->
   </QUDMMS_DB>
 </XML>
