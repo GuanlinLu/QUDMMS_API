@@ -424,123 +424,132 @@ namespace QUDMMSAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> BrowseAssnList(JObject Parameter)
         {
-            /*Validation Required parameter */
-            if (string.IsNullOrEmpty(Convert.ToString(Parameter["page_number"])))
-            {
-                return BadRequest("Bad request, page number is required");
+            try
+            {  /*Validation Required parameter */
+                if (string.IsNullOrEmpty(Convert.ToString(Parameter["page_number"])))
+                {
+                    return BadRequest("Bad request, page number is required");
+                }
+
+                string Sql = "";
+                DynamicParameters DyParam_InstructorList = new DynamicParameters();
+
+                /*Dynamic Parameter Alter*/
+
+                if (!string.IsNullOrEmpty(Convert.ToString(Parameter["name"])))
+                {
+                    string Full_name = Convert.ToString(Parameter[""]);
+                    var Names = Full_name.Split(' ', '.', ',');
+                    string First_name = Names[0];
+                    string Last_name = Names[1];
+
+                    Sql += "AND `first_name` = @first_name AND `last_name` = @last_name" + " ";
+
+                    DyParam_InstructorList.Add("first_name", First_name);
+                    DyParam_InstructorList.Add("last_name", Last_name);
+                }
+
+                if (!string.IsNullOrEmpty(Convert.ToString(Parameter["course_code"])))
+                {
+                    string course_code = Convert.ToString(Parameter["course_code"]);
+                    Sql += "AND `course_code` = @course_code";
+                    DyParam_InstructorList.Add("course_code", course_code);
+                }
+
+                if (Sql != "") { Sql = "WHERE 1 = 1 " + Sql; }
+
+                /*calculate the total amount of records*/
+                string Original_3Y76ML19Mx = XMLHelper.GetSql("SQL_3Y76ML19Mx");// get recod amount
+                Original_3Y76ML19Mx = Original_3Y76ML19Mx.Replace("@dynamic_condition", Sql);
+                DataTable DT_3Y76ML19Mx = await DapperHelper.ExecuteSqlDataTableAsync(Original_3Y76ML19Mx, DyParam_InstructorList);
+
+                /*Get pagination */
+                DyParam_InstructorList.Add("page_number", (Convert.ToInt32(Parameter["page_number"]) - 1) * 10);
+                string Original_LfsAIEjVL4 = XMLHelper.GetSql("SQL_LfsAIEjVL4");
+                Original_LfsAIEjVL4 = Original_LfsAIEjVL4.Replace("@dynamic_condition", Sql);
+                DataTable DT_LfsAIEjVL4 = await DapperHelper.ExecuteSqlDataTableAsync(Original_LfsAIEjVL4, DyParam_InstructorList);// get datas
+
+                JArray jArray_Data = JArray.Parse(JsonConvert.SerializeObject(DT_LfsAIEjVL4));
+
+                JArray jArray_Columns = new JArray();
+
+                for (int i = 0; i < DT_LfsAIEjVL4.Columns.Count; i++)
+                {
+                    JObject Json = new JObject();
+                    Json.Add("tittle", DT_LfsAIEjVL4.Columns[i].ColumnName);
+                    Json.Add("dataIndex", DT_LfsAIEjVL4.Columns[i].ColumnName);
+
+                    jArray_Columns.Add(Json);
+                }
+
+                for (int j = 0; j < jArray_Data.Count; j++)
+                {
+                    ((JObject)jArray_Data[j]).Add("key", j);
+                }
+
+                JObject Json_Result = new JObject();
+
+                Json_Result.Add("pageSum", Convert.ToInt32(DT_3Y76ML19Mx.Rows[0]["pageSum"]));
+
+                Json_Result.Add("columnData", jArray_Columns);
+
+                Json_Result.Add("rowData", jArray_Data);
+
+                return Ok(Json_Result);
             }
+            catch (Exception ex) { return BadRequest("Get assignment failed."); }
 
-            string Sql = "";
-            DynamicParameters DyParam_InstructorList = new DynamicParameters();
-
-            /*Dynamic Parameter Alter*/
-
-            if (!string.IsNullOrEmpty(Convert.ToString(Parameter["searchBy"])))
-            {
-                string Full_name = Convert.ToString(Parameter["name"]);
-                var Names = Full_name.Split(' ', '.', ',');
-                string First_name = Names[0];
-                string Last_name = Names[1];
-
-                Sql += "AND `first_name` = @first_name AND `last_name` = @last_name" + " ";
-
-                DyParam_InstructorList.Add("first_name", First_name);
-                DyParam_InstructorList.Add("last_name", Last_name);
-            }
-
-            if (!string.IsNullOrEmpty(Convert.ToString(Parameter["instructor_id"])))
-            {
-                string instructor_id = Convert.ToString(Parameter["instructor_id"]);
-                Sql += "AND `instructor_id` = @instructor_id ";
-                DyParam_InstructorList.Add("instructor_id", instructor_id);
-            }
-
-            if (Sql != "") { Sql = "WHERE 1 = 1 " + Sql; }
-
-            /*calculate the total amount of records*/
-            string Original_zq61H4SJdL = XMLHelper.GetSql("SQL_zq61H4SJdL");// get recod amount
-            Original_zq61H4SJdL = Original_zq61H4SJdL.Replace("@dynamic_condition", Sql);
-            DataTable DT_zq61H4SJdL = await DapperHelper.ExecuteSqlDataTableAsync(Original_zq61H4SJdL, DyParam_InstructorList);
-
-            /*Get pagination */
-            DyParam_InstructorList.Add("page_number", (Convert.ToInt32(Parameter["page_number"]) - 1) * 10);
-            string Original_U83Eb0bl4Q = XMLHelper.GetSql("SQL_U83Eb0bl4Q");
-            Original_U83Eb0bl4Q = Original_U83Eb0bl4Q.Replace("@dynamic_condition", Sql);
-            DataTable DT_U83Eb0bl4Q = await DapperHelper.ExecuteSqlDataTableAsync(Original_U83Eb0bl4Q, DyParam_InstructorList);// get datas
-
-            JArray jArray_Data = JArray.Parse(JsonConvert.SerializeObject(DT_U83Eb0bl4Q));
-
-            JArray jArray_Columns = new JArray();
-
-            for (int i = 0; i < DT_U83Eb0bl4Q.Columns.Count; i++)
-            {
-                JObject Json = new JObject();
-                Json.Add("tittle", DT_U83Eb0bl4Q.Columns[i].ColumnName);
-                Json.Add("dataIndex", DT_U83Eb0bl4Q.Columns[i].ColumnName);
-
-                jArray_Columns.Add(Json);
-            }
-
-            for (int j = 0; j < jArray_Data.Count; j++)
-            {
-                ((JObject)jArray_Data[j]).Add("key", j);
-            }
-
-            JObject Json_Result = new JObject();
-
-            Json_Result.Add("pageSum", Convert.ToInt32(DT_zq61H4SJdL.Rows[0]["pageSum"]));
-
-            Json_Result.Add("columnData", jArray_Columns);
-
-            Json_Result.Add("rowData", jArray_Data);
-
-            return Ok(Json_Result);
-        }
+        }//tested
 
         [HttpPost]
         public async Task<ActionResult> CreateAssnIns(JObject Parameter)
         {
-            Object Param_B1TVxNdzqj = new
+            try
             {
-                instructor_1_id = Convert.ToString(Parameter["instructor_id"]),
-                instructor_1_name = Convert.ToString(Parameter["instructor_name"]),
-                course_code = Convert.ToString(Parameter["course_code"]),
-                course_title = Convert.ToString(Parameter["course_title"]),
-                section_number = Convert.ToString(Parameter["section_number"]),
-                assn_term = Convert.ToString(Parameter["assn_term"]),
-                assn_year = Convert.ToString(Parameter["assn_year"]),
-                course_delivery = Convert.ToString(Parameter["course_delivery"]),
-                assn_notes = Convert.ToString(Parameter["assn_notes"]),
-                program = Convert.ToString(Parameter["program"])
-            };
-
-
-            //await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_B1TVxNdzqj"));
-
-            DataTable DT_B1TVxNdzqj = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_B1TVxNdzqj"), Param_B1TVxNdzqj);
-
-            JArray Jarray_weeklySchedule = (JArray)Parameter["weeklySchedule"];
-
-            foreach (var jws in Jarray_weeklySchedule)
-            {
-                Object Param_I7EwPEEqq7 = new
+                Object Param_B1TVxNdzqj = new
                 {
+                    instructor_1_id = Convert.ToString(Parameter["instructor_id"]),
+                    instructor_1_name = Convert.ToString(Parameter["instructor_name"]),
                     course_code = Convert.ToString(Parameter["course_code"]),
+                    course_title = Convert.ToString(Parameter["course_title"]),
                     section_number = Convert.ToString(Parameter["section_number"]),
-                    lecture_day = Convert.ToString(jws["lecture_day"]),
-                    teaching_address = Convert.ToString(jws["teaching_address"]),
-                    lecture_start_time = Convert.ToString(jws["startTime"]),
-                    lecture_end_time = Convert.ToString(jws["endTime"]),
-                    instructor_id = Convert.ToString(jws["instructor_id"]),
-                    instructor_name = Convert.ToString(Parameter["instructor_name"]),
-                    assn_id = Convert.ToString(DT_B1TVxNdzqj.Rows[0]["assn_id"]),
+                    assn_term = Convert.ToString(Parameter["assn_term"]),
+                    assn_year = Convert.ToString(Parameter["assn_year"]),
+                    course_delivery = Convert.ToString(Parameter["course_delivery"]),
+                    assn_notes = Convert.ToString(Parameter["assn_notes"]),
                     program = Convert.ToString(Parameter["program"])
                 };
 
-                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_I7EwPEEqq7"), Param_I7EwPEEqq7);
-            };
 
-            return (Ok("Create assignment success."));
+                //await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_B1TVxNdzqj"));
+
+                DataTable DT_B1TVxNdzqj = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_B1TVxNdzqj"), Param_B1TVxNdzqj);
+
+                JArray Jarray_weeklySchedule = (JArray)Parameter["weeklySchedule"];
+
+                foreach (var jws in Jarray_weeklySchedule)
+                {
+                    Object Param_I7EwPEEqq7 = new
+                    {
+                        course_code = Convert.ToString(Parameter["course_code"]),
+                        section_number = Convert.ToString(Parameter["section_number"]),
+                        lecture_day = Convert.ToString(jws["lecture_day"]),
+                        teaching_address = Convert.ToString(jws["teaching_address"]),
+                        lecture_start_time = Convert.ToString(jws["startTime"]),
+                        lecture_end_time = Convert.ToString(jws["endTime"]),
+                        instructor_id = Convert.ToString(Parameter["instructor_id"]),
+                        instructor_name = Convert.ToString(Parameter["instructor_name"]),
+                        assn_id = Convert.ToString(DT_B1TVxNdzqj.Rows[0]["assn_id"]),
+                        program = Convert.ToString(Parameter["program"])
+                    };
+
+                    await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_I7EwPEEqq7"), Param_I7EwPEEqq7);
+                };
+
+                return (Ok("Create assignment success."));
+            }
+            catch (Exception ex) { return BadRequest("Create assignment failed."); }
+
         }//tested
 
         [HttpPost]
@@ -566,6 +575,7 @@ namespace QUDMMSAPI.Controllers
                 for (int i = 0; i < DT_9lCwockMTF.Rows.Count; i++)
                 {
                     JObject Json = new JObject();
+
                     Json.Add("course_code", Convert.ToString(DT_9lCwockMTF.Rows[i]["course_code"]));
                     Json.Add("section_number", Convert.ToString(DT_9lCwockMTF.Rows[i]["section_number"]));
                     Json.Add("lecture_day", Convert.ToString(DT_9lCwockMTF.Rows[i]["lecture_day"]));
@@ -580,68 +590,83 @@ namespace QUDMMSAPI.Controllers
             }
             catch (Exception ex) { return BadRequest("Get Assignment Detail Failed."); }
 
-        }
+        }//tested
 
         [HttpPost]
         public async Task<ActionResult> DeleteAssn(JObject Parameter)
         {
-            Object Param_2ASmH5jDGB = new
+            try
             {
-                assn_id = Convert.ToString(Parameter["assn_id"])
-            };
+                Object Param_2ASmH5jDGB = new
+                {
+                    assn_id = Convert.ToString(Parameter["assn_id"])
+                };
 
-            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_2ASmH5jDGB"), Param_2ASmH5jDGB);
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_2ASmH5jDGB"), Param_2ASmH5jDGB);
 
-            Object Param_PIq2W8EV22 = new
-            {
-                assn_id = Convert.ToString(Parameter["assn_id"])
-            };
-            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_PIq2W8EV22"), Param_PIq2W8EV22);
+                Object Param_PIq2W8EV22 = new
+                {
+                    assn_id = Convert.ToString(Parameter["assn_id"])
+                };
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_PIq2W8EV22"), Param_PIq2W8EV22);
 
-            return Ok("Assignment Deleted.");
+                return Ok("Assignment Deleted.");
+            }
+            catch (Exception ex) { return BadRequest("Delete assignment failed."); }
+
         }//tested
 
         [HttpPost]
         public async Task<ActionResult> UpdateAssn(JObject Parameter)
         {
-            Object Param_sL8HUUUQFg = new
+            try
             {
-                assn_id = Convert.ToString(Parameter["assn_id"]),
-                course_code = Convert.ToString(Parameter["course_code"]),
-                program = Convert.ToString(Parameter["program"]),
-                course_level = Convert.ToString(Parameter["course_level"]),
-                course_title = Convert.ToString(Parameter["course_title"]),
-                course_description = Convert.ToString(Parameter["course_description"]),
-                course_prerequisite = Convert.ToString((JArray)Parameter["course_prerequisite"]),
-                course_topics = Convert.ToString(Parameter["course_topics"]),
-                course_weight = Convert.ToString(Parameter["course_weight"]),
-                course_teaching_load = Convert.ToString(Parameter["course_teaching_load"]),
-                course_note = Convert.ToString(Parameter["course_note"]),
-                combined_course = Convert.ToString(Parameter["combined_course"])
-            };
-
-            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql(XMLHelper.GetSql("SQL_sL8HUUUQFg")));//Update Basic
-
-            JArray Jarray_weeklySchedule = (JArray)Parameter["weeklySchedule"];
-
-            foreach (var jws in Jarray_weeklySchedule)
-            {
-                Object Param_fPaqQUQ7mK = new
+                Object Param_sL8HUUUQFg = new
                 {
+                    assn_id = Convert.ToString(Parameter["assn_id"]),
+                    instructor_1_id = Convert.ToString(Parameter["instructor_id"]),
+                    instructor_1_name = Convert.ToString(Parameter["instructor_name"]),
                     course_code = Convert.ToString(Parameter["course_code"]),
+                    course_title = Convert.ToString(Parameter["course_title"]),
                     section_number = Convert.ToString(Parameter["section_number"]),
-                    lecture_day = Convert.ToString(jws["lecture_day"]),
-                    teaching_address = Convert.ToString(jws["teaching_address"]),
-                    lecture_startTime = Convert.ToString(jws["startTime"]),
-                    lecture_endTime = Convert.ToString(jws["endTime"]),
-                    instructor_name = Convert.ToString(Parameter["instructor_name"])
+                    assn_term = Convert.ToString(Parameter["assn_term"]),
+                    assn_year = Convert.ToString(Parameter["assn_year"]),
+                    course_delivery = Convert.ToString(Parameter["course_delivery"]),
+                    assn_notes = Convert.ToString(Parameter["assn_notes"]),
+                    program = Convert.ToString(Parameter["program"])
                 };
 
-                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_fPaqQUQ7mK"));
-            };
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_sL8HUUUQFg"), Param_sL8HUUUQFg);//Update Basic &return assn_id
 
-            return Ok("Update success.");
-        }
+
+                JArray Jarray_weeklySchedule = (JArray)Parameter["weekly_Schedule"];
+
+                foreach (var jws in Jarray_weeklySchedule)
+                {
+                    Object Param_fPaqQUQ7mK = new
+                    {
+                        assn_id = Convert.ToString(Parameter["assn_id"]),
+                        lecture_id = Convert.ToString(jws["lecture_id"]),
+                        course_code = Convert.ToString(Parameter["course_code"]),
+                        section_number = Convert.ToString(Parameter["section_number"]),
+                        lecture_day = Convert.ToString(jws["lecture_day"]),
+                        teaching_address = Convert.ToString(jws["teaching_address"]),
+                        lecture_start_time = Convert.ToString(jws["startTime"]),
+                        lecture_end_time = Convert.ToString(jws["endTime"]),
+                        instructor_id = Convert.ToString(Parameter["instructor_id"]),
+                        instructor_name = Convert.ToString(Parameter["instructor_name"]),
+                        program = Convert.ToString(Parameter["program"])
+
+                    };
+
+                    await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_fPaqQUQ7mK"), Param_fPaqQUQ7mK);
+                };
+
+                return Ok("Update success.");
+            }
+            catch (Exception ex) { return BadRequest("Update assignment failed."); }
+
+        }//tested
 
         #endregion
 
@@ -649,6 +674,168 @@ namespace QUDMMSAPI.Controllers
         #endregion
 
         #region [QUDMMS]-Admin-TAMS-UserMS
+        [HttpPost]
+
+        public async Task<ActionResult> BrowseUserList(JObject Parameter)//tested
+        {
+            try
+            {  /*Validation Required parameter */
+                if (string.IsNullOrEmpty(Convert.ToString(Parameter["page_number"])))
+                {
+                    return BadRequest("Bad request, page number is required");
+                }
+
+                string Sql = "";
+                DynamicParameters DyParam_InstructorList = new DynamicParameters();
+
+                /*Dynamic Parameter Alter*/
+
+                if (!string.IsNullOrEmpty(Convert.ToString(Parameter["name"])))
+                {
+                    string Full_name = Convert.ToString(Parameter[""]);
+                    var Names = Full_name.Split(' ', '.', ',');
+                    string First_name = Names[0];
+                    string Last_name = Names[1];
+
+                    Sql += "AND `first_name` = @first_name AND `last_name` = @last_name" + " ";
+
+                    DyParam_InstructorList.Add("first_name", First_name);
+                    DyParam_InstructorList.Add("last_name", Last_name);
+                }
+
+                if (!string.IsNullOrEmpty(Convert.ToString(Parameter["NetId"])))
+                {
+                    string NetId = Convert.ToString(Parameter["NetId"]);
+                    Sql += "AND `NetId` = @NetId";
+                    DyParam_InstructorList.Add("NetId", NetId);
+                }
+
+                if (Sql != "") { Sql = "WHERE 1 = 1 " + Sql; }
+
+                /*calculate the total amount of records*/
+                string Original_1Dkms3DKvE = XMLHelper.GetSql("SQL_1Dkms3DKvE");// get recod amount
+                Original_1Dkms3DKvE = Original_1Dkms3DKvE.Replace("@dynamic_condition", Sql);
+                DataTable DT_1Dkms3DKvE = await DapperHelper.ExecuteSqlDataTableAsync(Original_1Dkms3DKvE, DyParam_InstructorList);
+
+                /*Get pagination */
+                DyParam_InstructorList.Add("page_number", (Convert.ToInt32(Parameter["page_number"]) - 1) * 10);
+                string Original_9thTSLE1wk = XMLHelper.GetSql("SQL_9thTSLE1wk");
+                Original_9thTSLE1wk = Original_9thTSLE1wk.Replace("@dynamic_condition", Sql);
+                DataTable DT_9thTSLE1wk = await DapperHelper.ExecuteSqlDataTableAsync(Original_9thTSLE1wk, DyParam_InstructorList);// get datas
+
+                JArray jArray_Data = JArray.Parse(JsonConvert.SerializeObject(DT_9thTSLE1wk));
+
+                JArray jArray_Columns = new JArray();
+
+                for (int i = 0; i < DT_9thTSLE1wk.Columns.Count; i++)
+                {
+                    JObject Json = new JObject();
+                    Json.Add("tittle", DT_9thTSLE1wk.Columns[i].ColumnName);
+                    Json.Add("dataIndex", DT_9thTSLE1wk.Columns[i].ColumnName);
+
+                    jArray_Columns.Add(Json);
+                }
+
+                for (int j = 0; j < jArray_Data.Count; j++)
+                {
+                    ((JObject)jArray_Data[j]).Add("key", j);
+                }
+
+                JObject Json_Result = new JObject();
+
+                Json_Result.Add("pageSum", Convert.ToInt32(DT_1Dkms3DKvE.Rows[0]["pageSum"]));
+
+                Json_Result.Add("columnData", jArray_Columns);
+
+                Json_Result.Add("rowData", jArray_Data);
+
+                return Ok(Json_Result);
+            }
+            catch (Exception ex) { return BadRequest("Get user list failed."); };
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateUser(JObject Parameter)
+        {
+            try
+            {
+                Object Param_JKUH1mDln6 = new
+                {
+                    userNetId = Convert.ToString(Parameter["userNetId"]),
+                    first_name = Convert.ToString(Parameter["first_name"]),
+                    last_name = Convert.ToString(Parameter["last_name"]),
+                    login_pw = Convert.ToString(Parameter["login_pw"]),
+                    user_status = Convert.ToString(Parameter["user_status"])
+                };
+
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_JKUH1mDln6"), Param_JKUH1mDln6);//create basic info
+
+                Object Param_hFpkFMv4Xo = new
+                {
+                    role_name = Convert.ToString(Parameter["role_name"])
+                };
+
+                DataTable DT_hFpkFMv4Xo = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_hFpkFMv4Xo"), Param_hFpkFMv4Xo);
+
+                String role_id = Convert.ToString(DT_hFpkFMv4Xo.Rows[0]["role_id"]);
+
+                Object Param_ivKY3cvabw = new
+                {
+                    userNetId = Convert.ToString(Parameter["userNetId"]),
+                    role_id = role_id
+                };
+
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_ivKY3cvabw"), Param_ivKY3cvabw);
+                return Ok("Create user success.");
+            }
+            catch (Exception ex) { return BadRequest("Create user failed."); }
+
+        }//tested
+
+        [HttpPost]
+        public async Task<ActionResult> UserDetail(JObject Parameter)
+        {
+            try
+            {
+                Object Param_KG6aVK5I15 = new
+                {
+                    userNetId = Convert.ToString(Parameter["userNetId"])
+                };
+
+                DataTable DT_KG6aVK5I15 = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_KG6aVK5I15"), Param_KG6aVK5I15);
+
+                JObject Json_Result = (JObject)JArray.Parse(JsonConvert.SerializeObject(DT_KG6aVK5I15))[0];
+                return Ok(Json_Result);
+            }
+            catch (Exception ex) { return BadRequest("Get user detail failed."); }
+
+        } //tested
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteUser(JObject Parameter)
+        {
+            try
+            {
+                Object Param_6ZpTkyYMSB = new
+                {
+                    userNetId = Convert.ToString(Parameter["userNetId"])
+                };
+
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_6ZpTkyYMSB"), Param_6ZpTkyYMSB);
+
+                return Ok("Deleted user success.");
+            }
+            catch (Exception ex) { return BadRequest("Delete user failed."); }
+
+        }//tested
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateUser(JObject Parameter)
+        {
+
+            return Ok();
+        }
         #endregion
 
 

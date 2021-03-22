@@ -121,7 +121,9 @@
       FROM `QUDMMS_DB`.`QUDM_TAMS_courseInfo`
       @dynamic_condition;
     </SQL_8aN4nnYYVz>
-
+    SELECT COUNT(*) AS pageSum
+    FROM `QUDMMS_DB`.`QUDM_TAMS_assignmentSched`
+    @dynamic_condition;
     <SQL_yZZSnuIMA4>
       SELECT `QUDMMS_DB`.`QUDM_TAMS_courseInfo`.`course_code`,
       `QUDM_TAMS_courseInfo`.`program`,
@@ -209,6 +211,25 @@
     </SQL_UOMyQmL2rw>
 
     <!--[QUDMMS]-AssnMS-->
+
+    <SQL_3Y76ML19Mx>
+      SELECT COUNT(*) AS pageSum
+      FROM `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`
+      @dynamic_condition;
+    </SQL_3Y76ML19Mx>
+
+    <SQL_LfsAIEjVL4>
+      SELECT `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`.`assn_id` AS 'Assignment ID',
+      `QUDM_TAMS_assignmentSchedule`.`course_code` AS 'Course Code',
+      `QUDM_TAMS_assignmentSchedule`.`assn_year` AS 'Year',
+      `QUDM_TAMS_assignmentSchedule`.`instructor_1_id` AS 'Instructor ID',
+      `QUDM_TAMS_assignmentSchedule`.`instructor_1_name` AS 'Instructor Name'
+      FROM `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`
+      @dynamic_condition
+      ORDER BY `QUDM_TAMS_assignmentSchedule`.`assn_id` DESC
+      LIMIT @page_number , 10;
+    </SQL_LfsAIEjVL4>
+
     <SQL_B1TVxNdzqj>
       INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`
       (`course_code`,
@@ -293,6 +314,37 @@
       WHERE `assn_id`= @assn_id;
     </SQL_9lCwockMTF>
 
+    <SQL_sL8HUUUQFg>
+      UPDATE `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`
+      SET
+      `course_code` = @course_code,
+      `section_number` = @section_number,
+      `course_title` = @course_title,
+      `assn_year` = @assn_year,
+      `assn_term` = @assn_term,
+      `course_delivery` = @course_delivery,
+      `instructor_1_id` = @instructor_1_id,
+      `instructor_1_name` = @instructor_1_name,
+      `assn_notes` = @assn_notes,
+      `program` =@program
+      WHERE `assn_id` = @assn_id;
+    </SQL_sL8HUUUQFg>
+
+    <SQL_fPaqQUQ7mK >
+      UPDATE `QUDMMS_DB`.`QUDM_TAMS_DM_weeklySchedule`
+      SET
+      `course_code` = @course_code,
+      `section_number` = @section_number,
+      `lecture_day` = @lecture_day,
+      `teaching_address` = @teaching_address,
+      `lecture_start_time` = @lecture_start_time,
+      `lecture_end_time` = @lecture_end_time,
+      `instructor_id` = @instructor_id,
+      `instructor_name` = @instructor_name,
+      `program` = @program
+      WHERE `assn_id` = @assn_id;
+    </SQL_fPaqQUQ7mK>
+
     <SQL_2ASmH5jDGB>
       DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`
       WHERE `assn_id`= @assn_id;
@@ -303,6 +355,99 @@
       WHERE `assn_id`= @assn_id;
     </SQL_PIq2W8EV22>
 
+    <!---->
+
+    <!--[QUDMMS]-UserMs-->
+    <SQL_1Dkms3DKvE>
+      SELECT COUNT(*) AS pageSum
+      FROM `QUDMMS_DB`.`QUDM_RMS_userInfo`
+      @dynamic_condition;
+    </SQL_1Dkms3DKvE>
+
+    <SQL_9thTSLE1wk>
+      SELECT Q.`userNetId` AS `Net ID`,
+      Q.`first_name` AS `First Name`,
+      Q.`last_name` AS `Last Name`,
+      Q.`user_status` As `User Status`,
+      W.role_name
+      FROM `QUDMMS_DB`.`QUDM_RMS_userInfo` Q
+      LEFT JOIN
+      (SELECT
+      A.`userNetId`, GROUP_CONCAT(C.role_name) AS 'role_name'
+      FROM
+      `QUDMMS_DB`.`QUDM_RMS_userInfo` A
+      LEFT JOIN `QUDMMS_DB`.`QUDM_RMS_userRoleRel` B ON A.userNetId = B.userNetId
+      LEFT JOIN `QUDMMS_DB`.`QUDM_RMS_role` C ON B.role_id = C.role_id
+      GROUP BY A.`userNetId`) W ON Q.userNetId = W.userNetId
+      @dynamic_condition
+      ORDER BY Q.`userNetId` DESC
+      LIMIT @page_number , 10;
+    </SQL_9thTSLE1wk>
+
+    <SQL_JKUH1mDln6>
+      INSERT INTO `QUDMMS_DB`.`QUDM_RMS_userInfo`
+      (`userNetId`,
+      `first_name`,
+      `last_name`,
+      `login_pw`,
+      `register_time`,
+      `user_status`)
+      VALUES
+      (@userNetId,
+      @first_name,
+      @last_name,
+      @login_pw,
+      now(),
+      @user_status);
+    </SQL_JKUH1mDln6>
+
+    <SQL_hFpkFMv4Xo>
+      SELECT `QUDM_RMS_role`.`role_id`
+      FROM `QUDMMS_DB`.`QUDM_RMS_role`
+      WHERE
+      `role_name`=@role_name;
+    </SQL_hFpkFMv4Xo>
+
+    <SQL_ivKY3cvabw>
+      INSERT INTO `QUDMMS_DB`.`QUDM_RMS_userRoleRel`
+      (
+      `userNetId`,
+      `role_id`)
+      VALUES
+      (
+      @userNetId,
+      @role_id);
+    </SQL_ivKY3cvabw>
+
+    <SQL_KG6aVK5I15>
+      SELECT
+      Q.`userNetId`,
+      Q.`first_name`,
+      Q.`last_name`,
+      Q.`login_pw`,
+      Q.`user_status`,
+      W.role_name
+      FROM
+      `QUDMMS_DB`.`QUDM_RMS_userInfo` Q
+      LEFT JOIN
+      (SELECT
+      A.`userNetId`, GROUP_CONCAT(C.role_name) AS 'role_name'
+      FROM
+      `QUDMMS_DB`.`QUDM_RMS_userInfo` A
+      LEFT JOIN `QUDMMS_DB`.`QUDM_RMS_userRoleRel` B ON A.userNetId = B.userNetId
+      LEFT JOIN `QUDMMS_DB`.`QUDM_RMS_role` C ON B.role_id = C.role_id
+      GROUP BY A.`userNetId`) W ON Q.userNetId = W.userNetId
+      WHERE
+      Q.`userNetId` = @userNetId;
+    </SQL_KG6aVK5I15>
+
+    <SQL_6ZpTkyYMSB>
+      DELETE FROM `QUDMMS_DB`.`QUDM_RMS_userInfo`
+      WHERE userNetId = @userNetId;
+
+      DELETE FROM `QUDMMS_DB`.`QUDM_RMS_userRoleRel`
+      WHERE userNetId=@userNetId;
+    </SQL_6ZpTkyYMSB>
     <!---->
   </QUDMMS_DB>
 </XML>
