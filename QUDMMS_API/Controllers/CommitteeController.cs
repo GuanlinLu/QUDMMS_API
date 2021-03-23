@@ -94,7 +94,7 @@ namespace QUDMMSAPI.Controllers
             };
             */
 
-        [Httppost]
+        [HttpPost]
         public async Task<ActionResult> CreateCommitteeRel(JObject Parameter)
         {
             Object Param_comms_rel_create = new
@@ -110,7 +110,7 @@ namespace QUDMMSAPI.Controllers
             return Ok("Committee role creation was successful.");
         }
     
-        [Httppost]
+        [HttpPost]
         public async Task<ActionResult> UpdateCommitteeRel(JObject Parameter)
         {
             Object Param_comms_rel_update = new
@@ -118,7 +118,7 @@ namespace QUDMMSAPI.Controllers
                     cttee_title = Convert.ToString(Parameter["cttee_title"]),
                     cttee_role = Convert.ToString(Parameter["cttee_role"]),
                     instructor_id = Convert.ToString(Parameter["instructor_id"]),
-                    cttee_role = Convert.ToString(Parameter["rel_id"]),
+                    rel_id = Convert.ToString(Parameter["rel_id"]),
                     cttee_year = Convert.ToString(Parameter["cttee_year"])
             };
 
@@ -126,7 +126,7 @@ namespace QUDMMSAPI.Controllers
             return Ok("Committee role update was successful.");
         }
 
-        [Httppost]
+        [HttpPost]
         public async Task<ActionResult> DeleteCommitteeRel(JObject Parameter)
         {
             Object Param_comms_rel_delete = new
