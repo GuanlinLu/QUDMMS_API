@@ -476,7 +476,7 @@ namespace QUDMMSAPI.Controllers
                 for (int i = 0; i < DT_LfsAIEjVL4.Columns.Count; i++)
                 {
                     JObject Json = new JObject();
-                    Json.Add("tittle", DT_LfsAIEjVL4.Columns[i].ColumnName);
+                    Json.Add("title", DT_LfsAIEjVL4.Columns[i].ColumnName);
                     Json.Add("dataIndex", DT_LfsAIEjVL4.Columns[i].ColumnName);
 
                     jArray_Columns.Add(Json);
