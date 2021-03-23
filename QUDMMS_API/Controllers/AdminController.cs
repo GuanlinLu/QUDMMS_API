@@ -74,7 +74,7 @@ namespace QUDMMSAPI.Controllers
                 for (int i = 0; i < DT_U83Eb0bl4Q.Columns.Count; i++)
                 {
                     JObject Json = new JObject();
-                    Json.Add("tittle", DT_U83Eb0bl4Q.Columns[i].ColumnName);
+                    Json.Add("title", DT_U83Eb0bl4Q.Columns[i].ColumnName);
                     Json.Add("dataIndex", DT_U83Eb0bl4Q.Columns[i].ColumnName);
 
                     jArray_Columns.Add(Json);
@@ -300,7 +300,7 @@ namespace QUDMMSAPI.Controllers
             for (int i = 0; i < DT_yZZSnuIMA4.Columns.Count; i++)
             {
                 JObject Json = new JObject();
-                Json.Add("tittle", DT_yZZSnuIMA4.Columns[i].ColumnName);
+                Json.Add("title", DT_yZZSnuIMA4.Columns[i].ColumnName);
                 Json.Add("dataIndex", DT_yZZSnuIMA4.Columns[i].ColumnName);
 
                 jArray_Columns.Add(Json);
@@ -730,7 +730,7 @@ namespace QUDMMSAPI.Controllers
                 for (int i = 0; i < DT_9thTSLE1wk.Columns.Count; i++)
                 {
                     JObject Json = new JObject();
-                    Json.Add("tittle", DT_9thTSLE1wk.Columns[i].ColumnName);
+                    Json.Add("title", DT_9thTSLE1wk.Columns[i].ColumnName);
                     Json.Add("dataIndex", DT_9thTSLE1wk.Columns[i].ColumnName);
 
                     jArray_Columns.Add(Json);
