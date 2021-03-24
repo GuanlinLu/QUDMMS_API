@@ -21,84 +21,86 @@ namespace QUDMMSAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> BrowseInstructorList(JObject Parameter)
         {
-            try
+            //try
+            //{
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest("Unknow Error");
+            //}
+
+
+            /*Validation Required parameter */
+            if (string.IsNullOrEmpty(Convert.ToString(Parameter["page_number"])))
             {
-                /*Validation Required parameter */
-                if (string.IsNullOrEmpty(Convert.ToString(Parameter["page_number"])))
-                {
-                    return BadRequest("Bad request, page number is required");
-                }
-
-                string Sql = "";
-                DynamicParameters DyParam_InstructorList = new DynamicParameters();
-
-                /*Dynamic Parameter Alter*/
-
-                if (!string.IsNullOrEmpty(Convert.ToString(Parameter["name"])))
-                {
-                    string Full_name = Convert.ToString(Parameter["name"]);
-                    var Names = Full_name.Split(' ', '.', ',');
-                    string First_name = Names[0];
-                    string Last_name = Names[1];
-
-                    Sql += "AND `first_name` = @first_name AND `last_name` = @last_name" + " ";
-
-                    DyParam_InstructorList.Add("first_name", First_name);
-                    DyParam_InstructorList.Add("last_name", Last_name);
-                }
-
-                if (!string.IsNullOrEmpty(Convert.ToString(Parameter["instructor_id"])))
-                {
-                    string instructor_id = Convert.ToString(Parameter["instructor_id"]);
-                    Sql += "AND `instructor_id` = @instructor_id ";
-                    DyParam_InstructorList.Add("instructor_id", instructor_id);
-                }
-
-                if (Sql != "") { Sql = "WHERE 1 = 1 " + Sql; }
-
-                /*calculate the total amount of records*/
-                string Original_zq61H4SJdL = XMLHelper.GetSql("SQL_zq61H4SJdL");// get recod amount
-                Original_zq61H4SJdL = Original_zq61H4SJdL.Replace("@dynamic_condition", Sql);
-                DataTable DT_zq61H4SJdL = await DapperHelper.ExecuteSqlDataTableAsync(Original_zq61H4SJdL, DyParam_InstructorList);
-
-                /*Get pagination */
-                DyParam_InstructorList.Add("page_number", (Convert.ToInt32(Parameter["page_number"]) - 1) * 10);
-                string Original_U83Eb0bl4Q = XMLHelper.GetSql("SQL_U83Eb0bl4Q");
-                Original_U83Eb0bl4Q = Original_U83Eb0bl4Q.Replace("@dynamic_condition", Sql);
-                DataTable DT_U83Eb0bl4Q = await DapperHelper.ExecuteSqlDataTableAsync(Original_U83Eb0bl4Q, DyParam_InstructorList);// get datas
-
-                JArray jArray_Data = JArray.Parse(JsonConvert.SerializeObject(DT_U83Eb0bl4Q));
-
-                JArray jArray_Columns = new JArray();
-
-                for (int i = 0; i < DT_U83Eb0bl4Q.Columns.Count; i++)
-                {
-                    JObject Json = new JObject();
-                    Json.Add("tittle", DT_U83Eb0bl4Q.Columns[i].ColumnName);
-                    Json.Add("dataIndex", DT_U83Eb0bl4Q.Columns[i].ColumnName);
-
-                    jArray_Columns.Add(Json);
-                }
-
-                for (int j = 0; j < jArray_Data.Count; j++)
-                {
-                    ((JObject)jArray_Data[j]).Add("key", j);
-                }
-
-                JObject Json_Result = new JObject();
-
-                Json_Result.Add("pageSum", Convert.ToInt32(DT_zq61H4SJdL.Rows[0]["pageSum"]));
-
-                Json_Result.Add("columnData", jArray_Columns);
-
-                Json_Result.Add("rowData", jArray_Data);
-
-                return Ok(Json_Result);
+                return BadRequest("Bad request, page number is required");
             }
-            catch (Exception ex)
+
+            string Sql = "";
+            DynamicParameters DyParam_InstructorList = new DynamicParameters();
+
+            /*Dynamic Parameter Alter*/
+
+            if (!string.IsNullOrEmpty(Convert.ToString(Parameter["name"])))
             {
-                return BadRequest("Unknow Error");
+                string Full_name = Convert.ToString(Parameter["name"]);
+                var Names = Full_name.Split(' ', '.', ',');
+                string First_name = Names[0];
+                string Last_name = Names[1];
+
+                Sql += "AND `first_name` = @first_name AND `last_name` = @last_name" + " ";
+
+                DyParam_InstructorList.Add("first_name", First_name);
+                DyParam_InstructorList.Add("last_name", Last_name);
             }
+
+            if (!string.IsNullOrEmpty(Convert.ToString(Parameter["instructor_id"])))
+            {
+                string instructor_id = Convert.ToString(Parameter["instructor_id"]);
+                Sql += "AND `instructor_id` = @instructor_id ";
+                DyParam_InstructorList.Add("instructor_id", instructor_id);
+            }
+
+            if (Sql != "") { Sql = "WHERE 1 = 1 " + Sql; }
+
+            /*calculate the total amount of records*/
+            string Original_zq61H4SJdL = XMLHelper.GetSql("SQL_zq61H4SJdL");// get recod amount
+            Original_zq61H4SJdL = Original_zq61H4SJdL.Replace("@dynamic_condition", Sql);
+            DataTable DT_zq61H4SJdL = await DapperHelper.ExecuteSqlDataTableAsync(Original_zq61H4SJdL, DyParam_InstructorList);
+
+            /*Get pagination */
+            DyParam_InstructorList.Add("page_number", (Convert.ToInt32(Parameter["page_number"]) - 1) * 10);
+            string Original_U83Eb0bl4Q = XMLHelper.GetSql("SQL_U83Eb0bl4Q");
+            Original_U83Eb0bl4Q = Original_U83Eb0bl4Q.Replace("@dynamic_condition", Sql);
+            DataTable DT_U83Eb0bl4Q = await DapperHelper.ExecuteSqlDataTableAsync(Original_U83Eb0bl4Q, DyParam_InstructorList);// get datas
+
+            JArray jArray_Data = JArray.Parse(JsonConvert.SerializeObject(DT_U83Eb0bl4Q));
+
+            JArray jArray_Columns = new JArray();
+
+            for (int i = 0; i < DT_U83Eb0bl4Q.Columns.Count; i++)
+            {
+                JObject Json = new JObject();
+                Json.Add("title", DT_U83Eb0bl4Q.Columns[i].ColumnName);
+                Json.Add("dataIndex", DT_U83Eb0bl4Q.Columns[i].ColumnName);
+
+                jArray_Columns.Add(Json);
+            }
+
+            for (int j = 0; j < jArray_Data.Count; j++)
+            {
+                ((JObject)jArray_Data[j]).Add("key", j);
+            }
+
+            JObject Json_Result = new JObject();
+
+            Json_Result.Add("pageSum", Convert.ToInt32(DT_zq61H4SJdL.Rows[0]["pageSum"]));
+
+            Json_Result.Add("columnData", jArray_Columns);
+
+            Json_Result.Add("rowData", jArray_Data);
+
+            return Ok(Json_Result);
 
 
         }//tested
@@ -300,7 +302,7 @@ namespace QUDMMSAPI.Controllers
             for (int i = 0; i < DT_yZZSnuIMA4.Columns.Count; i++)
             {
                 JObject Json = new JObject();
-                Json.Add("tittle", DT_yZZSnuIMA4.Columns[i].ColumnName);
+                Json.Add("title", DT_yZZSnuIMA4.Columns[i].ColumnName);
                 Json.Add("dataIndex", DT_yZZSnuIMA4.Columns[i].ColumnName);
 
                 jArray_Columns.Add(Json);
@@ -476,7 +478,7 @@ namespace QUDMMSAPI.Controllers
                 for (int i = 0; i < DT_LfsAIEjVL4.Columns.Count; i++)
                 {
                     JObject Json = new JObject();
-                    Json.Add("tittle", DT_LfsAIEjVL4.Columns[i].ColumnName);
+                    Json.Add("title", DT_LfsAIEjVL4.Columns[i].ColumnName);
                     Json.Add("dataIndex", DT_LfsAIEjVL4.Columns[i].ColumnName);
 
                     jArray_Columns.Add(Json);
@@ -730,7 +732,7 @@ namespace QUDMMSAPI.Controllers
                 for (int i = 0; i < DT_9thTSLE1wk.Columns.Count; i++)
                 {
                     JObject Json = new JObject();
-                    Json.Add("tittle", DT_9thTSLE1wk.Columns[i].ColumnName);
+                    Json.Add("title", DT_9thTSLE1wk.Columns[i].ColumnName);
                     Json.Add("dataIndex", DT_9thTSLE1wk.Columns[i].ColumnName);
 
                     jArray_Columns.Add(Json);

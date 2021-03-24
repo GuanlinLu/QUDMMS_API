@@ -9,11 +9,11 @@
     </SQL_zq61H4SJdL>
 
     <SQL_U83Eb0bl4Q>
-      SELECT `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`.`instructor_id` AS 'Instructor ID',
-      `QUDM_TAMS_instructorInfo`.`title` AS 'Title',
-      `QUDM_TAMS_instructorInfo`.`first_name` AS 'First Name',
-      `QUDM_TAMS_instructorInfo`.`last_name` AS 'Last Name',
-      `QUDM_TAMS_instructorInfo`.`email` AS 'Email'
+      SELECT `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`.`instructor_id`,
+      `QUDM_TAMS_instructorInfo`.`title`,
+      `QUDM_TAMS_instructorInfo`.`first_name`,
+      `QUDM_TAMS_instructorInfo`.`last_name`,
+      `QUDM_TAMS_instructorInfo`.`email`
       FROM `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
       @dynamic_condition
       ORDER BY `QUDM_TAMS_instructorInfo`.`last_name` DESC
