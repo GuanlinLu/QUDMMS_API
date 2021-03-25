@@ -557,40 +557,42 @@ namespace QUDMMSAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> AssnDetail(JObject Parameter)
         {
-            try
+            //try
+            //{
+                
+            //}
+            //catch (Exception ex) { return BadRequest("Get Assignment Detail Failed."); }
+
+            Object Param_KVxRK0QXiK = new
             {
-                Object Param_KVxRK0QXiK = new
-                {
-                    assn_id = Convert.ToString(Parameter["assn_id"])
-                };
-                DataTable DT_KVxRK0QXiK = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_KVxRK0QXiK"), Param_KVxRK0QXiK);
+                assn_id = Convert.ToString(Parameter["assn_id"])
+            };
+            DataTable DT_KVxRK0QXiK = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_KVxRK0QXiK"), Param_KVxRK0QXiK);
 
-                Object Param_9lCwockMTF = new
-                {
-                    //course_code = Convert.ToString(Parameter["course_code"]),
-                    //section_number = Convert.ToString(Parameter["section_number"]),
-                    //instructor_id = Convert.ToString(Parameter["instructor_id"])\
-                    assn_id = Convert.ToString(Parameter["assn_id"])
-                };
-                JArray jArray_9lCwockMTF = new JArray();
-                DataTable DT_9lCwockMTF = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_9lCwockMTF"), Param_9lCwockMTF);
-                for (int i = 0; i < DT_9lCwockMTF.Rows.Count; i++)
-                {
-                    JObject Json = new JObject();
+            Object Param_9lCwockMTF = new
+            {
+                //course_code = Convert.ToString(Parameter["course_code"]),
+                //section_number = Convert.ToString(Parameter["section_number"]),
+                //instructor_id = Convert.ToString(Parameter["instructor_id"])\
+                assn_id = Convert.ToString(Parameter["assn_id"])
+            };
+            JArray jArray_9lCwockMTF = new JArray();
+            DataTable DT_9lCwockMTF = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_9lCwockMTF"), Param_9lCwockMTF);
+            for (int i = 0; i < DT_9lCwockMTF.Rows.Count; i++)
+            {
+                JObject Json = new JObject();
 
-                    Json.Add("course_code", Convert.ToString(DT_9lCwockMTF.Rows[i]["course_code"]));
-                    Json.Add("section_number", Convert.ToString(DT_9lCwockMTF.Rows[i]["section_number"]));
-                    Json.Add("lecture_day", Convert.ToString(DT_9lCwockMTF.Rows[i]["lecture_day"]));
-                    Json.Add("startTime", Convert.ToString(DT_9lCwockMTF.Rows[i]["lecture_start_time"]));
-                    Json.Add("endTime", Convert.ToString(DT_9lCwockMTF.Rows[i]["lecture_end_time"]));
-                    Json.Add("teaching_address", Convert.ToString(DT_9lCwockMTF.Rows[i]["teaching_address"]));
-                    jArray_9lCwockMTF.Add(Json);
-                }
-                JObject Json_Result = (JObject)JArray.Parse(JsonConvert.SerializeObject(DT_KVxRK0QXiK))[0];
-                Json_Result.Add("weekly_Schedule", jArray_9lCwockMTF);
-                return Ok(Json_Result);
+                Json.Add("course_code", Convert.ToString(DT_9lCwockMTF.Rows[i]["course_code"]));
+                Json.Add("section_number", Convert.ToString(DT_9lCwockMTF.Rows[i]["section_number"]));
+                Json.Add("lecture_day", Convert.ToString(DT_9lCwockMTF.Rows[i]["lecture_day"]));
+                Json.Add("startTime", Convert.ToString(DT_9lCwockMTF.Rows[i]["lecture_start_time"]));
+                Json.Add("endTime", Convert.ToString(DT_9lCwockMTF.Rows[i]["lecture_end_time"]));
+                Json.Add("teaching_address", Convert.ToString(DT_9lCwockMTF.Rows[i]["teaching_address"]));
+                jArray_9lCwockMTF.Add(Json);
             }
-            catch (Exception ex) { return BadRequest("Get Assignment Detail Failed."); }
+            JObject Json_Result = (JObject)JArray.Parse(JsonConvert.SerializeObject(DT_KVxRK0QXiK))[0];
+            Json_Result.Add("weekly_Schedule", jArray_9lCwockMTF);
+            return Ok(Json_Result);
 
         }//tested
 
