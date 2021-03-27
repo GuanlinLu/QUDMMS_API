@@ -219,7 +219,7 @@
     </SQL_3Y76ML19Mx>
 
     <SQL_LfsAIEjVL4>
-      SELECT `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`.`assn_id` AS 'Assignment ID',
+      SELECT `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`.`assn_id`,
       `QUDM_TAMS_assignmentSchedule`.`course_code` AS 'Course Code',
       `QUDM_TAMS_assignmentSchedule`.`assn_year` AS 'Year',
       `QUDM_TAMS_assignmentSchedule`.`instructor_1_id` AS 'Instructor ID',
@@ -365,10 +365,10 @@
     </SQL_1Dkms3DKvE>
 
     <SQL_9thTSLE1wk>
-      SELECT Q.`userNetId` AS `Net ID`,
-      Q.`first_name` AS `First Name`,
-      Q.`last_name` AS `Last Name`,
-      Q.`user_status` As `User Status`,
+      SELECT Q.`userNetId`,
+      Q.`first_name` ,
+      Q.`last_name` ,
+      Q.`user_status`,
       W.role_name
       FROM `QUDMMS_DB`.`QUDM_RMS_userInfo` Q
       LEFT JOIN

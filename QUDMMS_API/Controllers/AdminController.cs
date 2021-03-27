@@ -201,44 +201,46 @@ namespace QUDMMSAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateInstructor(JObject Parameter)
         {
-            try
+            //try
+            //{
+
+            //}
+            //catch (Exception ex) { return BadRequest("Update insrtuctor profile failed."); }
+
+            Object Param_E6W9vT3JdU = new
             {
-                Object Param_E6W9vT3JdU = new
+                instructor_id = Convert.ToString(Parameter["instructor_id"]),
+                title = Convert.ToString(Parameter["title"]),
+                first_name = Convert.ToString(Parameter["first_name"]),
+                last_name = Convert.ToString(Parameter["last_name"]),
+                email = Convert.ToString(Parameter["email"]),
+                years_exp = Convert.ToString(Parameter["years_exp"]),
+                current_FTE = Convert.ToString(Parameter["current_FTE"]),
+                instructor_status = Convert.ToString(Parameter["instructor_status"]),
+                c_working_status = Convert.ToString(Parameter["c_working_status"]),
+                avaliable_term = Convert.ToString(Parameter["avaliable_term"]),
+                teaching_load = Convert.ToString(Parameter["teaching_load"]),
+                admin_load = Convert.ToString(Parameter["admin_load"]),
+                cfwd_load = Convert.ToString(Parameter["cfwd_load"]),
+                total_load = Convert.ToString(Parameter["total_load"])
+            };
+            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_E6W9vT3JdU"), Param_E6W9vT3JdU);// update basic info
+
+            JArray Jarray_teachingHistory = (JArray)Parameter["teaching_history"];
+            foreach (var jjs in Jarray_teachingHistory)
+            {
+                Object Param_b2nuUdjHBS = new
                 {
                     instructor_id = Convert.ToString(Parameter["instructor_id"]),
-                    title = Convert.ToString(Parameter["title"]),
-                    first_name = Convert.ToString(Parameter["first_name"]),
-                    last_name = Convert.ToString(Parameter["last_name"]),
-                    email = Convert.ToString(Parameter["email"]),
-                    years_exp = Convert.ToString(Parameter["years_exp"]),
-                    current_FTE = Convert.ToString(Parameter["current_FTE"]),
-                    instructor_status = Convert.ToString(Parameter["instructor_status"]),
-                    c_working_status = Convert.ToString(Parameter["c_working_status"]),
-                    avaliable_term = Convert.ToString(Parameter["avaliable_term"]),
-                    teaching_load = Convert.ToString(Parameter["teaching_load"]),
-                    admin_load = Convert.ToString(Parameter["admin_load"]),
-                    cfwd_load = Convert.ToString(Parameter["cfwd_load"]),
-                    total_load = Convert.ToString(Parameter["total_load"])
+                    course_code = Convert.ToString(jjs["course_code"]),
+                    course_title = Convert.ToString(jjs["course_title"]),
+                    section_number = Convert.ToString(jjs["section_number"]),
+                    teaching_year = Convert.ToString(jjs["teaching_year"])
                 };
-                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_E6W9vT3JdU"), Param_E6W9vT3JdU);// update basic info
-
-                JArray Jarray_teachingHistory = (JArray)Parameter["teaching_history"];
-                foreach (var jjs in Jarray_teachingHistory)
-                {
-                    Object Param_b2nuUdjHBS = new
-                    {
-                        instructor_id = Convert.ToString(Parameter["instructor_id"]),
-                        course_code = Convert.ToString(jjs["course_code"]),
-                        course_title = Convert.ToString(jjs["course_title"]),
-                        section_number = Convert.ToString(jjs["section_number"]),
-                        teaching_year = Convert.ToString(jjs["teaching_year"])
-                    };
-                    await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_b2nuUdjHBS"), Param_b2nuUdjHBS);// update teaching history
-                }
-
-                return Ok("Update instructor profile success.");
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_b2nuUdjHBS"), Param_b2nuUdjHBS);// update teaching history
             }
-            catch (Exception ex) { return BadRequest("Create insrtuctor profile failed."); }
+
+            return Ok("Update instructor profile success.");
 
 
 
@@ -669,6 +671,12 @@ namespace QUDMMSAPI.Controllers
             catch (Exception ex) { return BadRequest("Update assignment failed."); }
 
         }//tested
+
+        [HttpPost]
+        public async Task<ActionResult> GetCourseOptions(JObject Parameter) { return Ok(); }
+
+        [HttpPost]
+        public async Task<ActionResult> GetInstructorOptions(JObject Parameter) { return Ok(); }
 
         #endregion
 
