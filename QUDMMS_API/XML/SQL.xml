@@ -120,6 +120,21 @@
       DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
       WHERE `instructor_id` = @instructor_id;
     </SQL_2fufaYyDsT>
+
+    <SQL_hVy4fa7F1I>
+      SELECT
+      `first_name`,
+      `last_name`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
+      WHERE 1=1;
+    </SQL_hVy4fa7F1I>
+
+    <SQL_ax4gHdpezv>
+      SELECT
+      `course_code`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_courseInfo`
+      WHERE 1=1;
+    </SQL_ax4gHdpezv>
     <!--[QUDMMS]-CourseMS-->
     <SQL_8aN4nnYYVz>
       SELECT COUNT(*) AS pageSum

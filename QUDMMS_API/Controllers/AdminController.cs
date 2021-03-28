@@ -207,7 +207,7 @@ namespace QUDMMSAPI.Controllers
             //}
             //catch (Exception ex) { return BadRequest("Update insrtuctor profile failed."); }
 
-            
+
             Object Param_E6W9vT3JdU = new
             {
                 instructor_id = Convert.ToString(Parameter["instructor_id"]),
@@ -674,15 +674,32 @@ namespace QUDMMSAPI.Controllers
         }//tested
 
         [HttpPost]
-        public async Task<ActionResult> GetCourseOptions(JObject Parameter)
+        public async Task<ActionResult> getCourseOptions()
         {
-
-
-            return Ok();
+            DataTable DT_ax4gHdpezv = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_ax4gHdpezv"));
+            JArray Json_Result = new JArray();
+            for (int i = 0; i < DT_ax4gHdpezv.Rows.Count; i++)
+            {
+                Json_Result.Add(Convert.ToString(DT_ax4gHdpezv.Rows[i]["course_code"]));
+            }
+            return Ok(Json_Result);
         }
 
+
         [HttpPost]
-        public async Task<ActionResult> GetInstructorOptions(JObject Parameter) { return Ok(); }
+        public async Task<ActionResult> GetInstructorOptions(JObject Parameter)
+        {
+            //DataTable DT_hVy4fa7F1I = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_hVy4fa7F1I"));
+
+            //string first_name = JsonConvert.SerializeObject(DT_hVy4fa7F1I))[0][];
+            //string last_name = JsonConvert.SerializeObject(DT_hVy4fa7F1I))[1];
+            //JArray Json_Result = new JArray();
+            //for (int i = 0; i < DT_hVy4fa7F1I.Rows.Count; i++)
+            //{
+            //    Json_Result.Add(Convert.ToString(DT_hVy4fa7F1I.Rows[i]["subject_name"]));
+            //}
+            return Ok();
+        }
 
         #endregion
 
