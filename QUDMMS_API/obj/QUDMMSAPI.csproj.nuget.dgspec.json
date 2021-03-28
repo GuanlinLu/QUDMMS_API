@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "E:\\cisc498\\QUDMMD_API\\QUDMMS_API\\QUDMMS_API\\QUDMMSAPI.csproj": {}
+    "C:\\Users\\Admin\\Documents\\GitHub\\QUDMMS_API\\QUDMMS_API\\QUDMMSAPI.csproj": {}
   },
   "projects": {
-    "E:\\cisc498\\QUDMMD_API\\QUDMMS_API\\QUDMMS_API\\QUDMMSAPI.csproj": {
+    "C:\\Users\\Admin\\Documents\\GitHub\\QUDMMS_API\\QUDMMS_API\\QUDMMSAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\cisc498\\QUDMMD_API\\QUDMMS_API\\QUDMMS_API\\QUDMMSAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\QUDMMS_API\\QUDMMS_API\\QUDMMSAPI.csproj",
         "projectName": "QUDMMSAPI",
-        "projectPath": "E:\\cisc498\\QUDMMD_API\\QUDMMS_API\\QUDMMS_API\\QUDMMSAPI.csproj",
-        "packagesPath": "C:\\Users\\Owner\\.nuget\\packages\\",
-        "outputPath": "E:\\cisc498\\QUDMMD_API\\QUDMMS_API\\QUDMMS_API\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\QUDMMS_API\\QUDMMS_API\\QUDMMSAPI.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\QUDMMS_API\\QUDMMS_API\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Owner\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -71,7 +75,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

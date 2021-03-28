@@ -440,7 +440,7 @@ namespace QUDMMSAPI.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost] //tested
         public async Task<ActionResult> CreateCommittee(JObject Parameter)
         {
 
@@ -451,7 +451,7 @@ namespace QUDMMSAPI.Controllers
                 co_chair_admin_weight = Convert.ToString(Parameter["co_chair_admin_weight"]),
                 secretary_admin_weight = Convert.ToString(Parameter["secretary_admin_weight"]),
                 memeber_admin_weight = Convert.ToString(Parameter["memeber_admin_weight"]),
-                cttee_year = Convert.ToString(Parameter["ctee_year"]),
+                cttee_year = Convert.ToString(Parameter["cttee_year"]),
                 cttee_notes = Convert.ToString(Parameter["cttee_notes"]),
             };
             await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_comms"), Param_comms_create);

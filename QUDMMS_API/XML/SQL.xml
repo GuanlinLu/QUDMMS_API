@@ -451,7 +451,6 @@
 	  
 	<SQL_comms>
       INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo`(
-      `cttee_id`,
       `cttee_tittle`,
       `cttee_year`,
       `chair_admin_weight`,
@@ -460,7 +459,6 @@
       `memeber_admin_weight`,
       `cttee_notes`)
       VALUES(
-      @cttee_id,
       @cttee_tittle,
       @cttee_year,
       @chair_admin_weight,
@@ -493,8 +491,8 @@
 
     <SQL_comms_rel_create>
       INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_instructorCtteeRel`(
-      'cttee_id',
-      'belong_cttee',
+      `cttee_id`,
+      `belong_cttee`,
       `instructor_id`,
       `cttee_role`,
       `cttee_year`)
@@ -504,17 +502,17 @@
       @instructor_id,
       @cttee_role,
       @cttee_year);
-    </SQL_comms_rel>
+    </SQL_comms_rel_create>
 
     <SQL_comms_rel_update>
       UPDATE `QUDMMS_DB`.`QUDM_TAMS_instructorCtteeRel`(
-      'cttee_id',
+      `cttee_id`,
       `belong_cttee`,
       `instructor_id`,
       `cttee_role`,
       `cttee_year`)
       VALUES(
-      @'cttee_id',
+      @cttee_id,
       @belong_cttee,
       @instructor_id,
       @cttee_role,
@@ -544,102 +542,6 @@
         DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo` WHERE cttee_id = @cttee_id;
         DELETE FROM `QUDMMS_DB`.`instructorCtteeRel` WHERE cttee_id = @cttee_id;
     </SQL_comms_del>
-
-	<SQL_comms>
-		INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo`(
-		`cttee_id`,
-		`cttee_tittle`,
-		`cttee_year`,
-		`chair_admin_weight`,
-		`co_chair_admin_weight`,
-		`secretary_admin_weight`,
-		`memeber_admin_weight`,
-		`cttee_notes`)
-		VALUES(
-		@cttee_id,
-		@cttee_tittle,
-		@cttee_year,
-		@chair_admin_weight,
-		@co_chair_admin_weight,
-		@secretary_admin_weight,
-		@memeber_admin_weight,
-		@cttee_notes);
-	</SQL_comms>
-
-	<SQL_comms_update>
-		UPDATE `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo`(
-		`cttee_id`,
-		`cttee_tittle`,
-		`cttee_year`,
-		`chair_admin_weight`,
-		`co_chair_admin_weight`,
-		`secretary_admin_weight`,
-		`memeber_admin_weight`,
-		`cttee_notes`)
-		VALUES(
-		@cttee_id,
-		@cttee_tittle,
-		@cttee_year,
-		@chair_admin_weight,
-		@co_chair_admin_weight,
-		@secretary_admin_weight,
-		@memeber_admin_weight,
-		@cttee_notes);
-	</SQL_comms_update>
-
-	<SQL_comms_rel_create>
-		INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_instructorCtteeRel`(
-		'cttee_id',
-		'belong_cttee',
-		`instructor_id`,
-		`cttee_role`,
-		`cttee_year`)
-		VALUES(
-		@cttee_id,
-		@belong_cttee,
-		@instructor_id,
-		@cttee_role,
-		@cttee_year);
-		</SQL_comms_rel>
-
-	<SQL_comms_rel_update>
-		UPDATE `QUDMMS_DB`.`QUDM_TAMS_instructorCtteeRel`(
-		'cttee_id',
-		`belong_cttee`,
-		`instructor_id`,
-		`cttee_role`,
-		`cttee_year`)
-		VALUES(
-		@'cttee_id',
-		@belong_cttee,
-		@instructor_id,
-		@cttee_role,
-		@cttee_year);
-	</SQL_comms_rel_update>
-
-		<SQL_comms_rel_delete>
-			DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_instructorCtteeRel` WHERE cttee_id = @cttee_id AND
-			instructor_id = @instructor_id AND cttee_role = @cttee_role AND cttee_year = @cttee_year;
-		</SQL_comms_rel_delete>
-
-		<SQL_comms_details>
-			SELECT `QUDM_TAMS_ctteeInfo`.`lecture_id`,
-			`QUDM_TAMS_ctteeInfo`.`cttee_id`,
-			`QUDM_TAMS_ctteeInfo`.`cttee_tittle`,
-			`QUDM_TAMS_ctteeInfo`.`cttee_year`,
-			`QUDM_TAMS_ctteeInfo`.`chair_admin_weight`,
-			`QUDM_TAMS_ctteeInfo`.`co_chair_admin_weight`,
-			`QUDM_TAMS_ctteeInfo`.`secretary_admin_weight`,
-			`QUDM_TAMS_ctteeInfo`.`memeber_admin_weight`,
-			`QUDM_TAMS_ctteeInfo`.`cttee_notes`
-			FROM `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo`
-			WHERE `cttee_tittle`= @cttee_tittle;
-		</SQL_comms_details>
-
-		<SQL_comms_del>
-			DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo` WHERE cttee_id = @cttee_id;
-			DELETE FROM `QUDMMS_DB`.`instructorCtteeRel` WHERE cttee_id = @cttee_id;
-		</SQL_comms_del>
 		
     <!---->
   </QUDMMS_DB>
