@@ -61,9 +61,14 @@
       `last_name`,
       `email`,
       `instructor_status`,
+      `current_FTE`,
       `years_exp`,
       `c_working_status`,
-      `avaliable_term`
+      `available_term`,
+      `teaching_load`,
+      `admin_load`,
+      `cfwd_load`,
+      `total_load`
       FROM
       `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
       WHERE
@@ -92,7 +97,7 @@
       `instructor_status` = @instructor_status,
       `years_exp` = @years_exp,
       `c_working_status` = @c_working_status,
-      `avaliable_term` = @avaliable_term,
+      `available_term` = @available_term,
       `teaching_load` = @teaching_load,
       `admin_load` = @admin_load,
       `cfwd_load` = @cfwd_load,
@@ -448,6 +453,30 @@
       DELETE FROM `QUDMMS_DB`.`QUDM_RMS_userRoleRel`
       WHERE userNetId=@userNetId;
     </SQL_6ZpTkyYMSB>
+
+    <SQL_DZWayKi0pb>
+      UPDATE `QUDMMS_DB`.`QUDM_RMS_userInfo`
+      SET
+      `first_name` = @first_name,
+      `last_name` = @last_name,
+      `login_pw` = @login_pw,
+      `user_status` = @user_status
+      WHERE `userNetId` = @userNetId;
+    </SQL_DZWayKi0pb>
+
+    <SQL_yH9geiA1js>
+      SELECT `QUDM_RMS_role`.`role_id`
+      FROM `QUDMMS_DB`.`QUDM_RMS_role`
+      WHERE
+      `role_name`=@role_name;
+    </SQL_yH9geiA1js>
+
+    <SQL_Q3BCay6wXV>
+      UPDATE `QUDMMS_DB`.`QUDM_RMS_userRoleRel`
+      SET
+      `role_id` = @role_id
+      WHERE `userNetId` = @userNetId;
+    </SQL_Q3BCay6wXV>
     <!---->
   </QUDMMS_DB>
 </XML>

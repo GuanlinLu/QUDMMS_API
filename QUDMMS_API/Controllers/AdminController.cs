@@ -207,6 +207,7 @@ namespace QUDMMSAPI.Controllers
             //}
             //catch (Exception ex) { return BadRequest("Update insrtuctor profile failed."); }
 
+            
             Object Param_E6W9vT3JdU = new
             {
                 instructor_id = Convert.ToString(Parameter["instructor_id"]),
@@ -218,7 +219,7 @@ namespace QUDMMSAPI.Controllers
                 current_FTE = Convert.ToString(Parameter["current_FTE"]),
                 instructor_status = Convert.ToString(Parameter["instructor_status"]),
                 c_working_status = Convert.ToString(Parameter["c_working_status"]),
-                avaliable_term = Convert.ToString(Parameter["avaliable_term"]),
+                available_term = Convert.ToString(Parameter["available_term"]),
                 teaching_load = Convert.ToString(Parameter["teaching_load"]),
                 admin_load = Convert.ToString(Parameter["admin_load"]),
                 cfwd_load = Convert.ToString(Parameter["cfwd_load"]),
@@ -673,7 +674,12 @@ namespace QUDMMSAPI.Controllers
         }//tested
 
         [HttpPost]
-        public async Task<ActionResult> GetCourseOptions(JObject Parameter) { return Ok(); }
+        public async Task<ActionResult> GetCourseOptions(JObject Parameter)
+        {
+
+
+            return Ok();
+        }
 
         [HttpPost]
         public async Task<ActionResult> GetInstructorOptions(JObject Parameter) { return Ok(); }
@@ -843,8 +849,43 @@ namespace QUDMMSAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateUser(JObject Parameter)
         {
+            try
+            {
+                Object Param_DZWayKi0pb = new
+                {
+                    userNetId = Convert.ToString(Parameter["userNetId"]),
+                    first_name = Convert.ToString(Parameter["first_name"]),
+                    last_name = Convert.ToString(Parameter["last_name"]),
+                    login_pw = Convert.ToString(Parameter["login_pw"]),
+                    user_status = Convert.ToString(Parameter["user_status"])
 
-            return Ok();
+                };
+
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_DZWayKi0pb"), Param_DZWayKi0pb);//update user basic info
+
+
+                Object Param_yH9geiA1js = new
+                {
+                    role_name = Convert.ToString(Parameter["role_name"])
+                };
+
+                DataTable DT_yH9geiA1js = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_yH9geiA1js"), Param_yH9geiA1js);//get role id
+
+                String role_id = Convert.ToString(DT_yH9geiA1js.Rows[0]["role_id"]);
+
+                Object Param_Q3BCay6wXV = new
+                {
+                    userNetId = Convert.ToString(Parameter["userNetId"]),
+                    role_id = role_id
+                };
+
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_Q3BCay6wXV"), Param_Q3BCay6wXV);
+
+
+                return Ok("Update user success");
+            }
+            catch (Exception ex) { return BadRequest("Update user failed."); }//tested
+
         }
         #endregion
 
