@@ -27,13 +27,30 @@
       `first_name`,
       `last_name`,
       `email`,
-      `years_exp`)VALUE(
+      `years_exp`,
+      `current_FTE`,
+      `instructor_status`,
+      `c_working_status`,
+      `available_term`,
+      `teaching_load`,
+      `admin_load`,
+      `cfwd_total`,
+      `total_load`
+      )VALUE(
       @instructor_id,
       @title,
       @first_name,
       @last_name,
       @email,
-      @years_exp);
+      @years_exp,
+      @current_FTE,
+      @instructor_status,
+      @c_working_status,
+      @available_term,
+      @teaching_load,
+      @admin_load,
+      @cfwd_load,
+      @total_load);
     </SQL_gdUg2TfBXJ>
 
     <SQL_XaFayq70bN>
@@ -492,6 +509,47 @@
       `role_id` = @role_id
       WHERE `userNetId` = @userNetId;
     </SQL_Q3BCay6wXV>
+
+    <!--[QUDMMS]-Admin-TAMS-InstructorMS-TeachingHistory-->
+    <SQL_u14l1pnNns>
+      INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_insrtuctorTeachingHistory`
+      (
+      `course_code`,
+      `course_title`,
+      `instructor_id`,
+      `teaching_year`,
+      `section_number`)
+      VALUES(
+      @course_code,
+      @course_title,
+      @instructor_id,
+      @teaching_year,
+      @section_number);
+    </SQL_u14l1pnNns>
+
+    <SQL_Hf5r195v6I>
+      DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_insrtuctorTeachingHistory`
+      WHERE `teachingHistory_id`=@teachingHistory_id;
+    </SQL_Hf5r195v6I>
+
+    <SQL_DwW1X7AWfY>
+      SELECT COUNT(*) AS pageSum
+      FROM `QUDMMS_DB`.`QUDM_TAMS_insrtuctorTeachingHistory`
+      WHERE `instructor_id`=@instructor_id
+    </SQL_DwW1X7AWfY>
+
+    <SQL_iwPcagxu3I>
+      SELECT `QUDM_TAMS_insrtuctorTeachingHistory`.`teachingHistory_id`,
+      `QUDM_TAMS_insrtuctorTeachingHistory`.`course_code`,
+      `QUDM_TAMS_insrtuctorTeachingHistory`.`course_title`,
+      `QUDM_TAMS_insrtuctorTeachingHistory`.`instructor_id`,
+      `QUDM_TAMS_insrtuctorTeachingHistory`.`teaching_year`,
+      `QUDM_TAMS_insrtuctorTeachingHistory`.`section_number`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_insrtuctorTeachingHistory`
+      ORDER BY `QUDM_TAMS_insrtuctorTeachingHistory`.`teachingHistory_id` DESC
+      LIMIT @page_number , 10;
+    </SQL_iwPcagxu3I>
+    <!---->
     <!---->
   </QUDMMS_DB>
 </XML>

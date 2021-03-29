@@ -118,7 +118,15 @@ namespace QUDMMSAPI.Controllers
                     first_name = Convert.ToString(Parameter["first_name"]),
                     last_name = Convert.ToString(Parameter["last_name"]),
                     email = Convert.ToString(Parameter["email"]),
-                    years_exp = Convert.ToString(Parameter["years_exp"])
+                    years_exp = Convert.ToString(Parameter["years_exp"]),
+                    current_FTE = Convert.ToString(Parameter["current_FTE"]),
+                    instructor_status = Convert.ToString(Parameter["instructor_status"]),
+                    c_working_status = Convert.ToString(Parameter["c_working_status"]),
+                    available_term = Convert.ToString(Parameter["available_term"]),
+                    teaching_load = Convert.ToString(Parameter["teaching_load"]),
+                    admin_load = Convert.ToString(Parameter["admin_load"]),
+                    cfwd_load = Convert.ToString(Parameter["cfwd_load"]),
+                    total_load = Convert.ToString(Parameter["total_load"])
                 };
 
                 await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_gdUg2TfBXJ"), Param_gdUg2TfBXJ);// Insert InstructorInfo
@@ -157,26 +165,27 @@ namespace QUDMMSAPI.Controllers
                 };
 
                 DataTable DT_Hy8e8CCYuJ = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_Hy8e8CCYuJ"), Param_Hy8e8CCYuJ);
-                //JObject Json_Hy8e8CCYuJ = (JObject)JArray.Parse(JsonConvert.SerializeObject(DT_Hy8e8CCYuJ))[0];
+                JObject Json_Hy8e8CCYuJ = (JObject)JArray.Parse(JsonConvert.SerializeObject(DT_Hy8e8CCYuJ))[0];
 
                 object Param_abyki3T37e = new
                 {
                     instructor_id = Convert.ToString(Parameter["instructor_id"])
                 };
 
-                DataTable DT_abyki3T37e = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_abyki3T37e"), Param_abyki3T37e);
-                JArray jArray_abyki3T37e = new JArray();
-                for (int i = 0; i < DT_abyki3T37e.Rows.Count; i++)
-                {
-                    JObject Json = new JObject();
-                    Json.Add("course_code", Convert.ToString(DT_abyki3T37e.Rows[i]["course_code"]));
-                    Json.Add("course_title", Convert.ToString(DT_abyki3T37e.Rows[i]["course_title"]));
-                    Json.Add("teaching_year", Convert.ToString(DT_abyki3T37e.Rows[i]["teaching_year"]));
-                    Json.Add("section_number", Convert.ToString(DT_abyki3T37e.Rows[i]["section_number"]));
-                    jArray_abyki3T37e.Add(Json);
-                }
+                //DataTable DT_abyki3T37e = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_abyki3T37e"), Param_abyki3T37e);
+                //JArray jArray_abyki3T37e = new JArray();
+                //for (int i = 0; i < DT_abyki3T37e.Rows.Count; i++)
+                //{
+                //    JObject Json = new JObject();
+                //    Json.Add("teachingHistory_id", Convert.ToString(DT_abyki3T37e.Rows[i]["teachingHistory_id"]));
+                //    Json.Add("course_code", Convert.ToString(DT_abyki3T37e.Rows[i]["course_code"]));
+                //    Json.Add("course_title", Convert.ToString(DT_abyki3T37e.Rows[i]["course_title"]));
+                //    Json.Add("teaching_year", Convert.ToString(DT_abyki3T37e.Rows[i]["teaching_year"]));
+                //    Json.Add("section_number", Convert.ToString(DT_abyki3T37e.Rows[i]["section_number"]));
+                //    jArray_abyki3T37e.Add(Json);
+                //}
                 JObject Json_Result = (JObject)JArray.Parse(JsonConvert.SerializeObject(DT_Hy8e8CCYuJ))[0];
-                Json_Result.Add("teaching_history", jArray_abyki3T37e);
+                //Json_Result.Add("teaching_history", jArray_abyki3T37e);
                 return Ok(Json_Result);
             }
             catch (Exception ex) { return BadRequest("Load Instructor Detail Failed."); }
@@ -247,6 +256,89 @@ namespace QUDMMSAPI.Controllers
 
         }//tested
         #endregion
+
+        #region [QUDMMS]-Admin-TAMS-InstructorMS-TeachingHistory
+        [HttpPost]
+        public async Task<ActionResult> CreateTeachingHistory(JObject Parameter)
+        {
+            Object Param_u14l1pnNns = new
+            {
+                instructor_id = Convert.ToString(Parameter["instructor_id"]),
+                course_code = Convert.ToString(Parameter["course_code"]),
+                course_title = Convert.ToString(Parameter["course_title"]),
+                section_number = Convert.ToString(Parameter["section_number"]),
+                teaching_year = Convert.ToString(Parameter["teaching_year"])
+            };
+            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_u14l1pnNns"), Param_u14l1pnNns);
+
+            return Ok("Create teahcing history success.");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteTeachingHistory(JObject Parameter)
+        {
+            Object Param_Hf5r195v6I = new
+            {
+                teachingHistory_id = Convert.ToString(Parameter["teachingHistory_id"])
+            };
+            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_Hf5r195v6I"), Param_Hf5r195v6I);
+
+            return Ok("Delete teaching history success.");
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> BrowseTeachingHistory(JObject Parameter)
+        {
+            Object Param_DwW1X7AWfY = new
+            {
+                page_number = Convert.ToString(Parameter["page_number"]),
+                instructor_id = Convert.ToString(Parameter["instructor_id"])
+            };
+
+            /*calculate the total amount of records*/
+            DataTable DT_DwW1X7AWfY = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_DwW1X7AWfY"), Param_DwW1X7AWfY);//get record amount
+
+
+            Object Param_iwPcagxu3I = new
+            {
+                page_number = (Convert.ToInt32(Parameter["page_number"]) - 1) * 10,
+                instructor_id = Convert.ToString(Parameter["instructor_id"])
+            };
+            /*Get pagination */
+            DataTable DT_iwPcagxu3I = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_iwPcagxu3I"), Param_iwPcagxu3I);//get data
+
+            JArray jArray_Data = JArray.Parse(JsonConvert.SerializeObject(DT_iwPcagxu3I));
+
+            JArray jArray_Columns = new JArray();
+
+            for (int i = 0; i < DT_iwPcagxu3I.Columns.Count; i++)
+            {
+                JObject Json = new JObject();
+                Json.Add("title", DT_iwPcagxu3I.Columns[i].ColumnName);
+                Json.Add("dataIndex", DT_iwPcagxu3I.Columns[i].ColumnName);
+
+                jArray_Columns.Add(Json);
+            }
+
+            for (int j = 0; j < jArray_Data.Count; j++)
+            {
+                ((JObject)jArray_Data[j]).Add("key", j);
+            }
+
+            JObject Json_Result = new JObject();
+
+            Json_Result.Add("pageSum", Convert.ToInt32(DT_DwW1X7AWfY.Rows[0]["pageSum"]));
+
+            Json_Result.Add("columnData", jArray_Columns);
+
+            Json_Result.Add("rowData", jArray_Data);
+
+            return Ok(Json_Result);
+
+        }
+        #endregion
+
 
         #region[QUDMMS]-Admin-TAMS-CourseMS 
         [HttpPost]
@@ -330,34 +422,34 @@ namespace QUDMMSAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateCourse(JObject Parameter)
         {
-            try
+            //try
+            //{
+
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest("Create course failed.");
+
+            //}
+            Object Param_wX7GCRLjmN = new
             {
-                Object Param_wX7GCRLjmN = new
-                {
-                    course_code = Convert.ToString(Parameter["course_code"]),
-                    program = Convert.ToString(Parameter["program"]),
-                    course_level = Convert.ToString(Parameter["course_level"]),
-                    course_title = Convert.ToString(Parameter["course_title"]),
-                    course_description = Convert.ToString(Parameter["course_description"]),
-                    course_prerequisite = Convert.ToString((JArray)Parameter["course_prerequisite"]),
-                    course_topics = Convert.ToString(Parameter["course_topics"]),
-                    course_weight = Convert.ToString(Parameter["course_weight"]),
-                    course_teaching_load = Convert.ToString(Parameter["course_teaching_load"]),
-                    course_note = Convert.ToString(Parameter["course_note"]),
-                    combined_course = Convert.ToString(Parameter["combined_course"])
-                };
+                course_code = Convert.ToString(Parameter["course_code"]),
+                program = Convert.ToString(Parameter["program"]),
+                course_level = Convert.ToString(Parameter["course_level"]),
+                course_title = Convert.ToString(Parameter["course_title"]),
+                course_description = Convert.ToString(Parameter["course_description"]),
+                course_prerequisite = ((JArray)Parameter["course_prerequisite"]),
+                course_topics = Convert.ToString(Parameter["course_topics"]),
+                course_weight = Convert.ToString(Parameter["course_weight"]),
+                course_teaching_load = Convert.ToString(Parameter["course_teaching_load"]),
+                course_note = Convert.ToString(Parameter["course_note"]),
+                combined_course = Convert.ToString(Parameter["combined_course"])
+            };
 
-                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_wX7GCRLjmN"), Param_wX7GCRLjmN);
+            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_wX7GCRLjmN"), Param_wX7GCRLjmN);
 
-                return Ok("Create course success.");
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Create course failed.");
-
-            }
-
+            return Ok("Create course success.");
 
         }//tested
 
