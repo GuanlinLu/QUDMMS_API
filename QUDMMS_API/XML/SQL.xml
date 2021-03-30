@@ -76,6 +76,7 @@
       `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`.`instructor_id`,
       `first_name`,
       `last_name`,
+      `title`,
       `email`,
       `instructor_status`,
       `current_FTE`,
@@ -546,6 +547,7 @@
       `QUDM_TAMS_insrtuctorTeachingHistory`.`teaching_year`,
       `QUDM_TAMS_insrtuctorTeachingHistory`.`section_number`
       FROM `QUDMMS_DB`.`QUDM_TAMS_insrtuctorTeachingHistory`
+      WHERE `instructor_id`=@instructor_id
       ORDER BY `QUDM_TAMS_insrtuctorTeachingHistory`.`teachingHistory_id` DESC
       LIMIT @page_number , 10;
     </SQL_iwPcagxu3I>

@@ -166,7 +166,6 @@ namespace QUDMMSAPI.Controllers
 
                 DataTable DT_Hy8e8CCYuJ = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_Hy8e8CCYuJ"), Param_Hy8e8CCYuJ);
                 JObject Json_Hy8e8CCYuJ = (JObject)JArray.Parse(JsonConvert.SerializeObject(DT_Hy8e8CCYuJ))[0];
-
                 object Param_abyki3T37e = new
                 {
                     instructor_id = Convert.ToString(Parameter["instructor_id"])
@@ -184,7 +183,7 @@ namespace QUDMMSAPI.Controllers
                 //    Json.Add("section_number", Convert.ToString(DT_abyki3T37e.Rows[i]["section_number"]));
                 //    jArray_abyki3T37e.Add(Json);
                 //}
-                JObject Json_Result = (JObject)JArray.Parse(JsonConvert.SerializeObject(DT_Hy8e8CCYuJ))[0];
+                JObject Json_Result = Json_Hy8e8CCYuJ;
                 //Json_Result.Add("teaching_history", jArray_abyki3T37e);
                 return Ok(Json_Result);
             }
@@ -338,7 +337,6 @@ namespace QUDMMSAPI.Controllers
 
         }
         #endregion
-
 
         #region[QUDMMS]-Admin-TAMS-CourseMS 
         [HttpPost]
@@ -792,6 +790,10 @@ namespace QUDMMSAPI.Controllers
             //}
             return Ok();
         }
+
+        #endregion
+
+        #region[QUDMMS]-Admin-TAMS-Assignment
 
         #endregion
 
