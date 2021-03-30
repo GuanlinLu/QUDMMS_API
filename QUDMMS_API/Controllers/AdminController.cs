@@ -108,48 +108,52 @@ namespace QUDMMSAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateInstructor(JObject Parameter)//tested
         {
-            try
+            //try
+            //{
+
+              
+
+            //}
+            //catch (Exception ex) { return BadRequest("Create insrtuctor profile failed."); }
+
+
+            Object Param_gdUg2TfBXJ = new
             {
+                instructor_id = Convert.ToString(Parameter["instructor_id"]),
+                title = Convert.ToString(Parameter["title"]),
+                first_name = Convert.ToString(Parameter["first_name"]),
+                last_name = Convert.ToString(Parameter["last_name"]),
+                email = Convert.ToString(Parameter["email"]),
+                years_exp = Convert.ToString(Parameter["years_exp"]),
+                current_FTE = Convert.ToString(Parameter["current_FTE"]),
+                instructor_status = Convert.ToString(Parameter["instructor_status"]),
+                c_working_status = Convert.ToString(Parameter["c_working_status"]),
+                available_term = Convert.ToString(Parameter["available_term"]),
+                teaching_load = Convert.ToString(Parameter["teaching_load"]),
+                admin_load = Convert.ToString(Parameter["admin_load"]),
+                cfwd_load = Convert.ToString(Parameter["cfwd_load"]),
+                total_load = Convert.ToString(Parameter["total_load"])
+            };
 
-                Object Param_gdUg2TfBXJ = new
-                {
-                    instructor_id = Convert.ToString(Parameter["instructor_id"]),
-                    title = Convert.ToString(Parameter["title"]),
-                    first_name = Convert.ToString(Parameter["first_name"]),
-                    last_name = Convert.ToString(Parameter["last_name"]),
-                    email = Convert.ToString(Parameter["email"]),
-                    years_exp = Convert.ToString(Parameter["years_exp"]),
-                    current_FTE = Convert.ToString(Parameter["current_FTE"]),
-                    instructor_status = Convert.ToString(Parameter["instructor_status"]),
-                    c_working_status = Convert.ToString(Parameter["c_working_status"]),
-                    available_term = Convert.ToString(Parameter["available_term"]),
-                    teaching_load = Convert.ToString(Parameter["teaching_load"]),
-                    admin_load = Convert.ToString(Parameter["admin_load"]),
-                    cfwd_load = Convert.ToString(Parameter["cfwd_load"]),
-                    total_load = Convert.ToString(Parameter["total_load"])
-                };
+            Object test = Param_gdUg2TfBXJ; 
+            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_gdUg2TfBXJ"), Param_gdUg2TfBXJ);// Insert InstructorInfo
 
-                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_gdUg2TfBXJ"), Param_gdUg2TfBXJ);// Insert InstructorInfo
+            //JArray Jarray_teachingHistory = (JArray)Parameter["teaching_history"];
 
-                JArray Jarray_teachingHistory = (JArray)Parameter["teaching_history"];
+            //foreach (var jjs in Jarray_teachingHistory)
+            //{
+            //    Object Param_XaFayq70bN = new
+            //    {
+            //        instructor_id = Convert.ToString(Parameter["instructor_id"]),
+            //        course_code = Convert.ToString(jjs["course_code"]),
+            //        course_title = Convert.ToString(jjs["course_title"]),
+            //        section_number = Convert.ToString(jjs["section_number"]),
+            //        teaching_year = Convert.ToString(jjs["teaching_year"])
+            //    };
+            //    await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_XaFayq70bN"), Param_XaFayq70bN);
+            //}
 
-                foreach (var jjs in Jarray_teachingHistory)
-                {
-                    Object Param_XaFayq70bN = new
-                    {
-                        instructor_id = Convert.ToString(Parameter["instructor_id"]),
-                        course_code = Convert.ToString(jjs["course_code"]),
-                        course_title = Convert.ToString(jjs["course_title"]),
-                        section_number = Convert.ToString(jjs["section_number"]),
-                        teaching_year = Convert.ToString(jjs["teaching_year"])
-                    };
-                    await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_XaFayq70bN"), Param_XaFayq70bN);
-                }
-
-                return Ok("Create instructor profile success.");
-
-            }
-            catch (Exception ex) { return BadRequest("Create insrtuctor profile failed."); }
+            return Ok("Create instructor profile success.");
 
 
         }
@@ -793,7 +797,15 @@ namespace QUDMMSAPI.Controllers
 
         #endregion
 
-        #region[QUDMMS]-Admin-TAMS-Assignment
+        #region[QUDMMS]-Admin-TAMS-Assignment-WeeklySchedule
+        [HttpPost]
+        public async Task<ActionResult> BrowseWeeklySchedule(JObject Parameter) { return Ok(); }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateWeeklyLecture(JObject Parameter) { return Ok(); }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteWeeklyLecture(JObject Parameter) { return Ok(); }
 
         #endregion
 

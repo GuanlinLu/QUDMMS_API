@@ -34,7 +34,7 @@
       `available_term`,
       `teaching_load`,
       `admin_load`,
-      `cfwd_total`,
+      `cfwd_load`,
       `total_load`
       )VALUE(
       @instructor_id,
