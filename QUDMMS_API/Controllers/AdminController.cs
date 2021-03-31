@@ -422,22 +422,21 @@ namespace QUDMMSAPI.Controllers
         #endregion
 
         #region [QUDMMS]-Admin-TAMS-Committee
-        [HttpPost]
+        [HttpPost]//can't test
         public async Task<ActionResult> SearchCommittee(JObject Parameter)
         {
             try
             {
                 Object Param_comms_search = new
                 {
-                    cttee_title = Convert.ToString(Parameter["cttee_title"])
+                    cttee_id = Convert.ToString(Parameter["cttee_id"])
                 };
 
-                DataTable DT_Param_comms_search = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_comms_details"), Param_comms_search);
+                DataTable DT_Param_comms_search = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_comms_search"), Param_comms_search);
                 JObject Json_Param_comms_search = (JObject)JArray.Parse(JsonConvert.SerializeObject(DT_Param_comms_search))[0]; //am i serializing data table or normal object
                 return Ok(Json_Param_comms_search);
             }
             catch (Exception ex) { return BadRequest("Load Committee Detail Failed."); }
-
         }
 
         [HttpPost] //tested
@@ -459,7 +458,7 @@ namespace QUDMMSAPI.Controllers
             return Ok("Successfully created committee.");
         }
 
-        [HttpPost]
+        [HttpPost] //can't test without the id fields
         public async Task<ActionResult> UpdateCommittee(JObject Parameter)
         {
             Object Param_comms_update = new
@@ -474,7 +473,7 @@ namespace QUDMMSAPI.Controllers
                 cttee_notes = Convert.ToString(Parameter["cttee_notes"]),
             };
 
-            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql(XMLHelper.GetSql("SQL_comms_update")));
+            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_comms_update"), Param_comms_update);
             return Ok("Update successful.");
         }
 
@@ -495,28 +494,48 @@ namespace QUDMMSAPI.Controllers
             await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_cttee_member_rel"));
         };
         */
+        [HttpPost]//can't test
+        public async Task<ActionResult> SearchCommitteeRel(JObject Parameter)
+        {
+            try
+            {
+                Object Param_comms_rel_search = new
+                {
+                    cttee_title = Convert.ToString(Parameter["cttee_title"])
+                };
+                
+                await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_comms_rel_search"), Param_comms_rel_search);
+                //DataTable DT_Param_comms_rel_search = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_comms_rel_search"), Param_comms_search);
+                //JObject Json_Param_comms_rel_search = (JObject)JArray.Parse(JsonConvert.SerializeObject(DT_Param_comms_rel_search))[0];
+                //return Ok(Json_Param_comms_rel_search);
+                return Ok("Successful search.");
+            }
+            catch (Exception ex) { return BadRequest("Committee relationship search failed."); }
+        }
 
-        [HttpPost]
+        [HttpPost] //tested
         public async Task<ActionResult> CreateCommitteeRel(JObject Parameter)
         {
             Object Param_comms_rel_create = new
             {
                 belong_cttee = Convert.ToString(Parameter["belong_cttee"]),
-                cttee_id = Convert.ToString(Parameter["cttee_id"]),
+                cttee_title = Convert.ToString(Parameter["cttee_title"]),
                 instructor_id = Convert.ToString(Parameter["instructor_id"]),
                 cttee_role = Convert.ToString(Parameter["ctee_role"]),
                 cttee_year = Convert.ToString(Parameter["cttee_year"])
             };
 
-            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql(XMLHelper.GetSql("SQL_comms_rel_create")));
+            await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_comms_rel_create"), Param_comms_rel_create);
             return Ok("Committee role creation was successful.");
         }
 
-        [HttpPost]
+        [HttpPost] //can't test without rel_ids
         public async Task<ActionResult> UpdateCommitteeRel(JObject Parameter)
         {
             Object Param_comms_rel_update = new
             {
+                belong_cttee = Convert.ToString(Parameter["belong_cttee"]),
+                rel_id = Convert.ToString(Parameter["rel_id"]),
                 cttee_title = Convert.ToString(Parameter["cttee_title"]),
                 cttee_role = Convert.ToString(Parameter["cttee_role"]),
                 instructor_id = Convert.ToString(Parameter["instructor_id"]),
@@ -532,24 +551,27 @@ namespace QUDMMSAPI.Controllers
         {
             Object Param_comms_rel_delete = new
             {
-                cttee_id = Convert.ToString(Parameter["cttee_id"]),
-                instructor_id = Convert.ToString(Parameter["instructor_id"]),
-                cttee_role = Convert.ToString(Parameter["cttee_role"]),
-                cttee_year = Convert.ToString(Parameter["cttee_year"])
+                rel_id = Convert.ToString(Parameter["rel_id"]),
+                //rel_id = Convert.ToString(Parameter["rel_id"]),
+                //cttee_title = Convert.ToString(Parameter["cttee_title"]),
+                //instructor_id = Convert.ToString(Parameter["instructor_id"]),
+                //cttee_role = Convert.ToString(Parameter["cttee_role"]),
+                //cttee_year = Convert.ToString(Parameter["cttee_year"])
             };
 
             await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql(XMLHelper.GetSql("SQL_comms_rel_delete")));
             return Ok("Committee role removal was successful.");
         }
 
-        [HttpPost]
+        [HttpPost] //can't test without ids
         public async Task<ActionResult> DeleteCommittee(JObject Parameter)
         {
             try
             {
                 Object Param_comms_del = new
                 {
-                    cttee_id = Convert.ToString(Parameter["cttee_id"])
+                    cttee_id = Convert.ToString(Parameter["cttee_id"]),
+                    cttee_tittle = Convert.ToString(Parameter["cttee_tittle"]) //can remove
                 };
 
                 await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_comms_del"), Param_comms_del);
