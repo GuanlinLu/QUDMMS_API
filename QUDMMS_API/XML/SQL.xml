@@ -48,7 +48,8 @@
       `teaching_load`,
       `admin_load`,
       `cfwd_load`,
-      `total_load`
+      `total_load`,
+      `instructorOptions`
       )VALUE(
       @instructor_id,
       @title,
@@ -63,7 +64,8 @@
       @teaching_load,
       @admin_load,
       @cfwd_load,
-      @total_load);
+      @total_load,
+      @instructorOptions);
     </SQL_gdUg2TfBXJ>
 
     <SQL_XaFayq70bN>
@@ -132,7 +134,8 @@
       `teaching_load` = @teaching_load,
       `admin_load` = @admin_load,
       `cfwd_load` = @cfwd_load,
-      `total_load` = @total_load
+      `total_load` = @total_load,
+      `instructorOptions`=@instructorOptions
       WHERE `instructor_id` = @instructor_id;
     </SQL_E6W9vT3JdU>
 
@@ -154,8 +157,7 @@
 
     <SQL_hVy4fa7F1I>
       SELECT
-      `first_name`,
-      `last_name`
+      `instructorOptions`
       FROM `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
       WHERE 1=1;
     </SQL_hVy4fa7F1I>
@@ -166,6 +168,26 @@
       FROM `QUDMMS_DB`.`QUDM_TAMS_courseInfo`
       WHERE 1=1;
     </SQL_ax4gHdpezv>
+
+    <SQL_PmFckm82h3>
+      SELECT
+      `first_name`,
+      `last_name`,
+      `instructor_id`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
+      WHERE
+      `instructorOptions` =@instructorOptions;
+    </SQL_PmFckm82h3>
+
+    <SQL_Lfih6quowR>
+      SELECT
+      `first_name`,
+      `last_name`,
+      `instructor_id`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_instructorInfo`
+      WHERE
+      `instructorOptions` =@instructorOptions;
+    </SQL_Lfih6quowR>
     <!--[QUDMMS]-CourseMS-->
     <SQL_8aN4nnYYVz>
       SELECT COUNT(*) AS pageSum
@@ -691,11 +713,11 @@
       DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_instructorCtteeRel`
       WHERE `cttee_id`=@cttee_id;
     </SQL_01Jr0kQ47E>
-     
+
     <!---->
     <!---->
     <!---->
-    
+
     <!--Produce Report-->
     <SQL_pn8MqyyNfH>
       SELECT `QUDM_TAMS_assignmentSchedule`.`assn_id`,

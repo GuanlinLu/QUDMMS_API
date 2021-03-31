@@ -19,7 +19,7 @@ namespace QUDMMSAPI.Common
 
     public class ExcelHelper
     {
-        public static void DumpExcel(DataTable tbl)
+        public static string DumpExcel(DataTable tbl)
         {
             //string[] tbl_j = tbl.Rows.OfType<DataRow>().Select(k => k[0].ToString()).ToArray();
 
@@ -53,7 +53,7 @@ namespace QUDMMSAPI.Common
             workSheet.Cells[1, 7].Value = "Course Delivery";
             workSheet.Cells[1, 8].Value = "Instructor Id";
             workSheet.Cells[1, 9].Value = "Instructor Name";
-            workSheet.Cells[1, 10                          ].Value = "Notes";
+            workSheet.Cells[1, 10].Value = "Notes";
             // Inserting the article data into excel
             // sheet by using the for each loop
             // As we have values to the first row 
@@ -105,20 +105,24 @@ namespace QUDMMSAPI.Common
             //string p_strPath = "H:\\geeksforgeeks.xlsx";
             //string BasePath = Directory.GetCurrentDirectory();//需要读取当前路径时记得用函数而不是./
 
-            string p_strPath = "E:\\test1.xlsx"; // 文件存储路径
 
-            if (File.Exists(p_strPath))
-                File.Delete(p_strPath);
 
+            string BasePath = Directory.GetCurrentDirectory();//需要读取当前路径时记得用函数而不是./
+            string UploadPath = @"/Temp/"; // 文件存储路径
+            string FileName = "OutputReport.xlsx";
+            string Path = BasePath + UploadPath + FileName;
+            if (File.Exists(Path))
+                File.Delete(Path);
             // Create excel file on physical disk 
-            FileStream objFileStrm = File.Create(p_strPath);
+            FileStream objFileStrm = File.Create(Path);
             objFileStrm.Close();
 
             // Write content to excel file 
-            File.WriteAllBytes(p_strPath, excel.GetAsByteArray());
+            File.WriteAllBytes(Path, excel.GetAsByteArray());
             //Close Excel package
             excel.Dispose();
-            Console.ReadKey();
+            //Console.ReadKey();
+            return (FileName);
         }
     }
 }

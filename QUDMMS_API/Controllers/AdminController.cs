@@ -10,7 +10,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Office.Interop.Excel;
+using Minio;
 
 
 
@@ -121,6 +121,7 @@ namespace QUDMMSAPI.Controllers
             //}
             //catch (Exception ex) { return BadRequest("Create insrtuctor profile failed."); }
 
+            string instructorOptions = Convert.ToString(Parameter["first_name"]) + " " + Convert.ToString(Parameter["last_name"]) + " " + Convert.ToString(Parameter["instructor_id"]);
 
             Object Param_gdUg2TfBXJ = new
             {
@@ -137,7 +138,8 @@ namespace QUDMMSAPI.Controllers
                 teaching_load = Convert.ToString(Parameter["teaching_load"]),
                 admin_load = Convert.ToString(Parameter["admin_load"]),
                 cfwd_load = Convert.ToString(Parameter["cfwd_load"]),
-                total_load = Convert.ToString(Parameter["total_load"])
+                total_load = Convert.ToString(Parameter["total_load"]),
+                instructorOptions = instructorOptions
             };
 
             Object test = Param_gdUg2TfBXJ;
@@ -223,7 +225,7 @@ namespace QUDMMSAPI.Controllers
 
             //}
             //catch (Exception ex) { return BadRequest("Update insrtuctor profile failed."); }
-
+            string instructorOptions = Convert.ToString(Parameter["first_name"]) + " " + Convert.ToString(Parameter["last_name"]) + " " + Convert.ToString(Parameter["instructor_id"]);
 
             Object Param_E6W9vT3JdU = new
             {
@@ -240,7 +242,8 @@ namespace QUDMMSAPI.Controllers
                 teaching_load = Convert.ToString(Parameter["teaching_load"]),
                 admin_load = Convert.ToString(Parameter["admin_load"]),
                 cfwd_load = Convert.ToString(Parameter["cfwd_load"]),
-                total_load = Convert.ToString(Parameter["total_load"])
+                total_load = Convert.ToString(Parameter["total_load"]),
+                instructorOptions = instructorOptions
             };
             await DapperHelper.ExecuteSqlIntAsync(XMLHelper.GetSql("SQL_E6W9vT3JdU"), Param_E6W9vT3JdU);// update basic info
 
@@ -263,6 +266,18 @@ namespace QUDMMSAPI.Controllers
 
 
         }//tested
+
+        [HttpPost]
+        public async Task<ActionResult> GetCtteeOptions()
+        {
+            DataTable DT_K0mEEH54zM = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_K0mEEH54zM"));
+            JArray Json_Result = new JArray();
+            for (int i = 0; i < DT_K0mEEH54zM.Rows.Count; i++)
+            {
+                Json_Result.Add(Convert.ToString(DT_K0mEEH54zM.Rows[i]["cttee_title"]));
+            }
+            return Ok(Json_Result);
+        }
         #endregion
 
         #region [QUDMMS]-Admin-TAMS-InstructorMS-TeachingHistory
@@ -345,6 +360,8 @@ namespace QUDMMSAPI.Controllers
             return Ok(Json_Result);
 
         }
+
+
         #endregion
 
         #region[QUDMMS]-Admin-TAMS-CourseMS 
@@ -854,10 +871,20 @@ namespace QUDMMSAPI.Controllers
             //}
             //catch (Exception ex) { return BadRequest("Create assignment failed."); }
 
+            Object Param_PmFckm82h3 = new
+            {
+                instructorOptions = Convert.ToString(Parameter["instructorOptions"])
+            };
+
+            DataTable DT_PmFckm82h3 = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_PmFckm82h3"), Param_PmFckm82h3);
+
+            string instructor_1_id = Convert.ToString(DT_PmFckm82h3.Rows[0]["instructor_id"]);
+            string instructor_name = Convert.ToString(DT_PmFckm82h3.Rows[0]["first_name"]) + Convert.ToString(DT_PmFckm82h3.Rows[0]["last_name"]);
+
             Object Param_B1TVxNdzqj = new
             {
-                instructor_1_id = Convert.ToString(Parameter["instructor_1_id"]),
-                instructor_1_name = Convert.ToString(Parameter["instructor_name"]),
+                instructor_1_id = instructor_1_id,
+                instructor_1_name = instructor_name,
                 course_code = Convert.ToString(Parameter["course_code"]),
                 course_title = Convert.ToString(Parameter["course_title"]),
                 section_number = Convert.ToString(Parameter["section_number"]),
@@ -945,11 +972,23 @@ namespace QUDMMSAPI.Controllers
         {
             try
             {
+
+                Object Param_Lfih6quowR = new
+                {
+                    instructorOptions = Convert.ToString(Parameter["instructorOptions"])
+                };
+
+                DataTable DT_Lfih6quowR = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_Lfih6quowR"), Param_Lfih6quowR);
+
+                string instructor_1_id = Convert.ToString(DT_Lfih6quowR.Rows[0]["instructor_1_id"]);
+                string instructor_name = Convert.ToString(DT_Lfih6quowR.Rows[0]["first_name"]) + Convert.ToString(DT_Lfih6quowR.Rows[0]["last_name"]);
+
+
                 Object Param_sL8HUUUQFg = new
                 {
                     assn_id = Convert.ToString(Parameter["assn_id"]),
-                    instructor_1_id = Convert.ToString(Parameter["instructor_1_id"]),
-                    instructor_1_name = Convert.ToString(Parameter["instructor_name"]),
+                    instructor_1_id = instructor_1_id,
+                    instructor_1_name = instructor_name,
                     course_code = Convert.ToString(Parameter["course_code"]),
                     course_title = Convert.ToString(Parameter["course_title"]),
                     section_number = Convert.ToString(Parameter["section_number"]),
@@ -1006,17 +1045,15 @@ namespace QUDMMSAPI.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> GetInstructorOptions(JObject Parameter)
+        public async Task<ActionResult> GetInstructorOptions()
         {
             System.Data.DataTable DT_hVy4fa7F1I = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_hVy4fa7F1I"));
             JArray Json_Result = new JArray();
 
             for (int i = 0; i < DT_hVy4fa7F1I.Rows.Count; i++)
             {
-                string first_name = Convert.ToString(DT_hVy4fa7F1I.Rows[i]["first_name"]);
-                string last_name = Convert.ToString(DT_hVy4fa7F1I.Rows[i]["last_name"]);
-                string full_name = first_name + " " + last_name;
-                Json_Result.Add(full_name);
+                string instructorOptions = Convert.ToString(DT_hVy4fa7F1I.Rows[i]["instructorOptions"]);
+                Json_Result.Add(instructorOptions);
             }
 
             return Ok(Json_Result);
@@ -1028,14 +1065,28 @@ namespace QUDMMSAPI.Controllers
         {
 
             System.Data.DataTable DT_pn8MqyyNfH = await DapperHelper.ExecuteSqlDataTableAsync(XMLHelper.GetSql("SQL_pn8MqyyNfH"));
-            string test = "test";
-            ExcelHelper.DumpExcel(DT_pn8MqyyNfH);
-            return Ok("Output Report Success");
+            string excelname = ExcelHelper.DumpExcel(DT_pn8MqyyNfH);
 
+
+            /* 上传申请表附件 */
+
+            string BasePath = Directory.GetCurrentDirectory();
+
+            string FilePath = @"/Temp/";
+
+            MinioClient Minio = new MinioClient(ConfigHelper.GetConfigRoot().GetSection("MinIOConnectionStrings:IP").Value, ConfigHelper.GetConfigRoot().GetSection("MinIOConnectionStrings:AccessKey").Value, ConfigHelper.GetConfigRoot().GetSection("MinIOConnectionStrings:SecretKey").Value);
+
+            using (FileStream FsRead = new FileStream(BasePath + FilePath + excelname, FileMode.Open, FileAccess.Read, FileShare.Read))//从业务服务器到minIO
+
+            {
+                await Minio.PutObjectAsync("assnreport", excelname, FsRead, FsRead.Length, "application/octet-stream");
+            }
+            string Url = await Minio.PresignedGetObjectAsync("assnreport", excelname, 7 * 24 * 60);
+            return Ok(Url);
         }
-            #endregion
+        #endregion
 
-            #region[QUDMMS]-Admin-TAMS-Assignment-WeeklySchedule
+        #region[QUDMMS]-Admin-TAMS-Assignment-WeeklySchedule
         [HttpPost]
         public async Task<ActionResult> BrowseWeeklySchedule(JObject Parameter)
         {
