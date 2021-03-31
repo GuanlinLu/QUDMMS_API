@@ -37,3 +37,10 @@ E:\cisc498\QUDMMD_API\QUDMMS_API\QUDMMS_API\obj\Debug\netcoreapp3.1\QUDMMSAPI.dl
 E:\cisc498\QUDMMD_API\QUDMMS_API\QUDMMS_API\obj\Debug\netcoreapp3.1\QUDMMSAPI.pdb
 E:\cisc498\QUDMMD_API\QUDMMS_API\QUDMMS_API\obj\Debug\netcoreapp3.1\QUDMMSAPI.genruntimeconfig.cache
 E:\cisc498\QUDMMD_API\QUDMMS_API\QUDMMS_API\obj\Debug\netcoreapp3.1\QUDMMSAPI.csprojAssemblyReference.cache
+E:\cisc498\QUDMMD_API\QUDMMS_API\QUDMMS_API\bin\Debug\netcoreapp3.1\EPPlus.dll
+E:\cisc498\QUDMMD_API\QUDMMS_API\QUDMMS_API\bin\Debug\netcoreapp3.1\Crc32.NET.dll
+E:\cisc498\QUDMMD_API\QUDMMS_API\QUDMMS_API\bin\Debug\netcoreapp3.1\Microsoft.Office.Interop.Excel.dll
+E:\cisc498\QUDMMD_API\QUDMMS_API\QUDMMS_API\bin\Debug\netcoreapp3.1\Minio.dll
+E:\cisc498\QUDMMD_API\QUDMMS_API\QUDMMS_API\bin\Debug\netcoreapp3.1\RestSharp.dll
+E:\cisc498\QUDMMD_API\QUDMMS_API\QUDMMS_API\bin\Debug\netcoreapp3.1\System.Reactive.dll
+E:\cisc498\QUDMMD_API\QUDMMS_API\QUDMMS_API\bin\Debug\netcoreapp3.1\System.Reactive.Linq.dll

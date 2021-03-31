@@ -1,6 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <XML>
   <QUDMMS_DB>
+
+
+    <!--[QUDMMS]-Login&Authentication-->
+    <SQL_6YJAbXWFxC>
+      SELECT * FROM `QUDMMS_DB`.`QUDM_RMS_userInfo` WHERE `userNetId` = @userNetId AND `login_pw` = @login_pw AND `user_status` = "active";
+    </SQL_6YJAbXWFxC>
+
+    <SQL_LHAC81aJ46>
+      UPDATE `QUDMMS_DB`.`QUDM_RMS_userInfo`
+      SET `access_token` = @Token
+      WHERE `userNetId` = @userNetId;
+    </SQL_LHAC81aJ46>
+
     <!--[QUDMMS]-InstructorMS-->
     <SQL_zq61H4SJdL>
       SELECT COUNT(*) AS pageSum
@@ -334,20 +347,21 @@
       `QUDM_TAMS_assignmentSchedule`.`assn_term`,
       `QUDM_TAMS_assignmentSchedule`.`course_delivery`,
       `QUDM_TAMS_assignmentSchedule`.`instructor_1_id`,
-      `QUDM_TAMS_assignmentSchedule`.`instructor_1_name`,
-      `QUDM_TAMS_assignmentSchedule`.`assn_notes`
+      `QUDM_TAMS_assignmentSchedule`.`instructor_1_name` AS `instructor_name`,
+      `QUDM_TAMS_assignmentSchedule`.`assn_notes`,
+      `QUDM_TAMS_assignmentSchedule`.`program`
       FROM `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`
       WHERE `assn_id` = @assn_id;
     </SQL_KVxRK0QXiK>
 
     <SQL_9lCwockMTF>
       SELECT `QUDM_TAMS_DM_weeklySchedule`.`lecture_id`,
-      `QUDM_TAMS_DM_weeklySchedule`.`course_code`,
-      `QUDM_TAMS_DM_weeklySchedule`.`section_number`,
-      `QUDM_TAMS_DM_weeklySchedule`.`lecture_day`,
-      `QUDM_TAMS_DM_weeklySchedule`.`teaching_address`,
-      `QUDM_TAMS_DM_weeklySchedule`.`lecture_start_time`,
-      `QUDM_TAMS_DM_weeklySchedule`.`lecture_end_time`
+      `QUDM_TAMS_DM_weeklySchedule`.`course_code` AS `Course Code`,
+      `QUDM_TAMS_DM_weeklySchedule`.`section_number` AS `Section Number`,
+      `QUDM_TAMS_DM_weeklySchedule`.`lecture_day` AS `Lecture Day`,
+      `QUDM_TAMS_DM_weeklySchedule`.`teaching_address` AS `Teaching Address`,
+      `QUDM_TAMS_DM_weeklySchedule`.`lecture_start_time` AS `Start Time`,
+      `QUDM_TAMS_DM_weeklySchedule`.`lecture_end_time` AS `End Time`
       FROM `QUDMMS_DB`.`QUDM_TAMS_DM_weeklySchedule`
       WHERE `assn_id`= @assn_id;
     </SQL_9lCwockMTF>
@@ -377,7 +391,7 @@
       `teaching_address` = @teaching_address,
       `lecture_start_time` = @lecture_start_time,
       `lecture_end_time` = @lecture_end_time,
-      `instructor_id` = @instructor_id,
+      `instructor_id` = @instructor_1_id,
       `instructor_name` = @instructor_name,
       `program` = @program
       WHERE `assn_id` = @assn_id;
@@ -482,9 +496,6 @@
     <SQL_6ZpTkyYMSB>
       DELETE FROM `QUDMMS_DB`.`QUDM_RMS_userInfo`
       WHERE userNetId = @userNetId;
-
-      DELETE FROM `QUDMMS_DB`.`QUDM_RMS_userRoleRel`
-      WHERE userNetId=@userNetId;
     </SQL_6ZpTkyYMSB>
 
     <SQL_DZWayKi0pb>
@@ -498,7 +509,7 @@
     </SQL_DZWayKi0pb>
 
     <SQL_yH9geiA1js>
-      SELECT `QUDM_RMS_role`.`role_id`
+      SELECT `QUDMMS_DB`.`QUDM_RMS_role`.`role_id`
       FROM `QUDMMS_DB`.`QUDM_RMS_role`
       WHERE
       `role_name`=@role_name;
@@ -551,7 +562,153 @@
       ORDER BY `QUDM_TAMS_insrtuctorTeachingHistory`.`teachingHistory_id` DESC
       LIMIT @page_number , 10;
     </SQL_iwPcagxu3I>
+
+
+    <!--WeeklySchedule-->
+    <SQL_WVS9s7uagD>
+      SELECT COUNT(*) AS pageSum
+      FROM `QUDMMS_DB`.`QUDM_TAMS_DM_weeklySchedule`
+      WHERE `assn_id`=@assn_id
+    </SQL_WVS9s7uagD>
+
+    <SQL_0Yo6Qg8VuT>
+      SELECT `QUDM_TAMS_DM_weeklySchedule`.`lecture_id`,
+      `QUDM_TAMS_DM_weeklySchedule`.`course_code` AS `Course Code`,
+      `QUDM_TAMS_DM_weeklySchedule`.`section_number` AS `Section Number`,
+      `QUDM_TAMS_DM_weeklySchedule`.`lecture_day` AS `Lecture Day`,
+      `QUDM_TAMS_DM_weeklySchedule`.`teaching_address` AS `Teaching Address`,
+      `QUDM_TAMS_DM_weeklySchedule`.`lecture_start_time` AS `Start Time`,
+      `QUDM_TAMS_DM_weeklySchedule`.`lecture_end_time` AS `End Time`,
+      `QUDM_TAMS_DM_weeklySchedule`.`shcedule_create_date` AS `Created Date`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_DM_weeklySchedule`
+      WHERE `assn_id`=@assn_id
+      ORDER BY `QUDM_TAMS_DM_weeklySchedule`.`lecture_id` DESC
+      LIMIT @page_number , 10;
+    </SQL_0Yo6Qg8VuT>
+
+    <SQL_WDHm6G1MI2>
+      INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_DM_weeklySchedule`
+      (
+      `course_code`,
+      `section_number`,
+      `lecture_day`,
+      `teaching_address`,
+      `lecture_start_time`,
+      `lecture_end_time`,
+      `instructor_id`,
+      `instructor_name`,
+      `shcedule_create_date`,
+      `assn_id`,
+      `program`)
+      VALUES
+      (
+      @course_code,
+      @section_number,
+      @lecture_day,
+      @teaching_address,
+      @lecture_start_time,
+      @lecture_end_time,
+      @instructor_1_id,
+      @instructor_name,
+      now(),
+      @assn_id,
+      @program);
+    </SQL_WDHm6G1MI2>
+
+    <SQL_HWemffXSr5>
+      DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_DM_weeklySchedule`
+      WHERE `lecture_id`=@lecture_id;
+    </SQL_HWemffXSr5>
+
+    <!--Cttee-->
+    <SQL_DKjhJvm1tb>
+      SELECT COUNT(*) AS pageSum
+      FROM `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo`
+      @dynamic_condition;
+    </SQL_DKjhJvm1tb>
+
+    <SQL_EO53iKSzCe>
+      SELECT `QUDM_TAMS_ctteeInfo`.`cttee_id`,
+      `QUDM_TAMS_ctteeInfo`.`cttee_title` AS `Committee Title`,
+      `QUDM_TAMS_ctteeInfo`.`cttee_year` AS `Committee Year`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo`
+      @dynamic_condition
+      ORDER BY `QUDM_TAMS_ctteeInfo`.`cttee_id` DESC
+      LIMIT @page_number , 10;
+    </SQL_EO53iKSzCe>
+
+    <SQL_ghXyAzY68O>
+      INSERT INTO `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo`
+      (
+      `cttee_title`,
+      `cttee_year`,
+      `chair_admin_weight`,
+      `co_chair_admin_weight`,
+      `secretary_admin_weight`,
+      `member_admin_weight`,
+      `cttee_notes`)
+      VALUES
+      (@cttee_title,
+      @cttee_year,
+      @chair_admin_weight,
+      @co_chair_admin_weight,
+      @secretary_admin_weight,
+      @member_admin_weight,
+      @cttee_notes);
+    </SQL_ghXyAzY68O>
+
+    <SQL_DQ6wZFLbtb>
+      SELECT `QUDM_TAMS_ctteeInfo`.`cttee_id`,
+      `QUDM_TAMS_ctteeInfo`.`cttee_title`,
+      `QUDM_TAMS_ctteeInfo`.`cttee_year`,
+      `QUDM_TAMS_ctteeInfo`.`chair_admin_weight`,
+      `QUDM_TAMS_ctteeInfo`.`co_chair_admin_weight`,
+      `QUDM_TAMS_ctteeInfo`.`secretary_admin_weight`,
+      `QUDM_TAMS_ctteeInfo`.`member_admin_weight`,
+      `QUDM_TAMS_ctteeInfo`.`cttee_notes`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo`;
+    </SQL_DQ6wZFLbtb>
+
+    <XGI4qQfXAV>
+      UPDATE `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo`
+      SET
+      `cttee_title` = @cttee_title,
+      `cttee_year` = @cttee_year,
+      `chair_admin_weight` = @chair_admin_weight,
+      `co_chair_admin_weight` = @co_chair_admin_weight,
+      `secretary_admin_weight` = @secretary_admin_weight,
+      `member_admin_weight` = @member_admin_weight,
+      `cttee_notes` = @cttee_notes
+      WHERE `cttee_id` = @cttee_id;
+    </XGI4qQfXAV>
+
+    <SQL_sTqUSewXk1>
+      DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_ctteeInfo`
+      WHERE `cttee_id`=@cttee_id;
+    </SQL_sTqUSewXk1>
+
+    <SQL_01Jr0kQ47E>
+      DELETE FROM `QUDMMS_DB`.`QUDM_TAMS_instructorCtteeRel`
+      WHERE `cttee_id`=@cttee_id;
+    </SQL_01Jr0kQ47E>
+     
     <!---->
     <!---->
+    <!---->
+    
+    <!--Produce Report-->
+    <SQL_pn8MqyyNfH>
+      SELECT `QUDM_TAMS_assignmentSchedule`.`assn_id`,
+      `QUDM_TAMS_assignmentSchedule`.`course_code`,
+      `QUDM_TAMS_assignmentSchedule`.`section_number`,
+      `QUDM_TAMS_assignmentSchedule`.`course_title`,
+      `QUDM_TAMS_assignmentSchedule`.`assn_year`,
+      `QUDM_TAMS_assignmentSchedule`.`assn_term`,
+      `QUDM_TAMS_assignmentSchedule`.`course_delivery`,
+      `QUDM_TAMS_assignmentSchedule`.`instructor_1_id`,
+      `QUDM_TAMS_assignmentSchedule`.`instructor_1_name`,
+      `QUDM_TAMS_assignmentSchedule`.`assn_notes`
+      FROM `QUDMMS_DB`.`QUDM_TAMS_assignmentSchedule`;
+    </SQL_pn8MqyyNfH>
   </QUDMMS_DB>
 </XML>
